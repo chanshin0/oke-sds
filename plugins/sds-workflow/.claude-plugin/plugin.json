@@ -1,8 +1,9 @@
 {
   "name": "sds-workflow",
-  "description": "오케스트로 SDS 팀 워크플로우 — Jira → Claude Code → GitLab MR 원샷 커맨드",
-  "version": "0.3.4",
+  "description": "Generic Jira → Claude Code → GitLab MR workflow (pick/ship/land/recap)",
+  "version": "0.4.0",
   "author": {
-    "name": "Okestro SDS"
-  }
+    "name": "chanshin0"
+  },
+  "license": "MIT"
 }

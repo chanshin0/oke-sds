@@ -16,7 +16,7 @@
    - `UI_CHANGE_GLOBS` ← `validation.ui_change_globs`
    - `MR_TARGET_BRANCH` ← `mr.target_branch` (기본 `main`, 저장소별로 `dev` 등 override 가능)
    - `GITLAB_BASE_URL` ← `gitlab.base_url` (폴백 URL 생성에 사용, 미설정 시 `git remote get-url remote-sds` 에서 파싱)
-   - `GITLAB_PROJECT_PATH` ← `gitlab.project_path` (예: `SDS306/remote-ceph-admin`, 미설정 시 `remote-sds` URL 파싱)
+   - `GITLAB_PROJECT_PATH` ← `gitlab.project_path` (예: `<your-group>/<your-project>`, 미설정 시 `remote-sds` URL 파싱)
    - `TEMPLATE_ROOT` = `${CLAUDE_PLUGIN_ROOT}/workflow/templates`
 4. **이슈키 정규식**: `^${PROJECT_KEY}-\d+$`
 5. 본문의 `CDS-XXXX` 표기는 `${PROJECT_KEY}-XXXX` 의 **예시**다. 실제 런타임에는 위에서 로드한 `PROJECT_KEY` 를 사용한다.

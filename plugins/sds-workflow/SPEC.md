@@ -454,7 +454,7 @@ Phase 6: Handoff — "다음: /pick {new_issue_key}"
 
 ```markdown
 ## 🔗 Jira
-[CDS-XXXX](https://okestro.atlassian.net/browse/CDS-XXXX) — {이슈 제목}
+[CDS-XXXX](https://<your-team>.atlassian.net/browse/CDS-XXXX) — {이슈 제목}
 
 ## 📝 변경 요약
 {자동 초안 → 사람이 1-3줄로 보정}
@@ -595,7 +595,7 @@ mr:
 |------|------|--------|------------|
 | A (Phase 1~3) | ceph-web-ui 에 `.claude/commands/*`, `.team-workflow/*` 직접 커밋 | 파일럿 1개 저장소 | — |
 | B (Phase 4) | 별도 git repo → `/plugin install <git-url>` | 팀 전체 저장소 | 파일럿 2주 안정 + 팀 합의 |
-| C (미채택) | `npx @okestro/team-workflow init` 스타일 | — | 플러그인으로 해결 안 될 때만 재검토 |
+| C (미채택) | `npx @<your-org>/team-workflow init` 스타일 | — | 플러그인으로 해결 안 될 때만 재검토 |
 
 **B 승격 체크리스트**:
 - `/pick` → `/ship` → `/land` E2E 5건 이상 성공
@@ -692,11 +692,11 @@ mr:
 
 ```
 # git URL 방식 — prd 에 marketplace.json 머지 전까지 #dev 핀 필요
-/plugin marketplace add http://gitlab.prd.console.trombone.okestro.cloud/SDS306/remote-ceph-admin.git#dev
+/plugin marketplace add <your-gitlab-host>/<your-group>/<your-project>.git#dev
 # 또는 로컬 clone 경로 방식
-/plugin marketplace add /path/to/remote-ceph-admin
+/plugin marketplace add /path/to/<your-marketplace>
 
-/plugin install sds-workflow@remote-ceph-admin
+/plugin install sds-workflow@<your-marketplace>
 /init   # 각 저장소에서 1회
 ```
 

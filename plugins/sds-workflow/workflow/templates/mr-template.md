@@ -1,6 +1,6 @@
 ## 🔗 Jira
 
-[{issue_key}](https://okestro.atlassian.net/browse/{issue_key}) — {issue_title}
+[{issue_key}](https://<your-team>.atlassian.net/browse/{issue_key}) — {issue_title}
 
 ## 📝 변경 요약
 

@@ -5,7 +5,7 @@
 jira:
   # 필수 — 이 저장소가 다루는 Jira 프로젝트 키 (예: CDS, PROJ)
   project_key: "{{PROJECT_KEY}}"
-  # 필수 — Atlassian site URL (예: https://okestro.atlassian.net)
+  # 필수 — Atlassian site URL (예: https://<your-team>.atlassian.net)
   base_url: "{{JIRA_BASE_URL}}"
 
 gitlab:
