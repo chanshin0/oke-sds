@@ -20,6 +20,13 @@ confluence:
   base_url: "{{CONFLUENCE_BASE_URL}}"
   space_key: "{{CONFLUENCE_SPACE_KEY}}"
   parent_id: ""
+  # 선택 — weekly-report plugin 사용 시 자동 채움 대상
+  weekly_report:
+    # 주간보고 루트 페이지 ID. 이 아래로 {Y}년 - {상/하}반기 / {M}월 폴더가
+    # 자동 생성되고, 그 안에 신주차 페이지가 들어간다.
+    root_id: ""
+    # 선택 — 첫 실행 시 명시 source 페이지 ID. 비우면 prev_monday 월 폴더에서 자동 선택.
+    template_source_id: ""
 
 federation:
   # 선택 — Module Federation 등 host 계약면 파일 목록 (저장소별)
