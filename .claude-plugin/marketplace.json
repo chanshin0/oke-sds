@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "chanshin0-sds",
-  "description": "SDS 팀 워크플로우 marketplace (private). sds-workflow + 성격별 skill bundle 큐레이션",
+  "name": "okestro-sds",
+  "description": "Okestro SDS 팀 marketplace (private). sds-workflow + 성격별 skill bundle 큐레이션",
   "owner": {
     "name": "Dongchan"
   },
