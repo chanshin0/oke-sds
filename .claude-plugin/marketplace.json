@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "chanshin0-sds",
-  "description": "SDS 팀 워크플로우 marketplace (private). sds-workflow plugin + 큐레이션된 개인 skills",
+  "description": "SDS 팀 워크플로우 marketplace (private). sds-workflow + 성격별 skill bundle 큐레이션",
   "owner": {
     "name": "Dongchan"
   },
@@ -13,19 +13,37 @@
       "description": "Jira → Claude Code → GitLab MR 워크플로우 (pick/ship/land/recap/where/draft/autopilot/tune/init)"
     },
     {
-      "name": "chanshin0-skills-work",
+      "name": "review-tools",
       "source": {
         "source": "github",
         "repo": "chanshin0/cc-skills-repo"
       },
-      "skills": [
-        "./skills/self-review",
-        "./skills/improve-token-efficiency",
-        "./skills/ai-readiness-cartography"
-      ],
+      "skills": ["./skills/self-review"],
       "strict": false,
       "category": "productivity",
-      "description": "회사 업무용으로 큐레이션된 chanshin0 개인 스킬 모음"
+      "description": "답변·결과물 비판적 재검토"
+    },
+    {
+      "name": "dev-analytics",
+      "source": {
+        "source": "github",
+        "repo": "chanshin0/cc-skills-repo"
+      },
+      "skills": ["./skills/improve-token-efficiency", "./skills/ai-readiness-cartography"],
+      "strict": false,
+      "category": "productivity",
+      "description": "Claude Code 사용·코드베이스 메트릭 분석"
+    },
+    {
+      "name": "content-creation",
+      "source": {
+        "source": "github",
+        "repo": "chanshin0/cc-skills-repo"
+      },
+      "skills": ["./skills/presentation_slides", "./skills/push-experience"],
+      "strict": false,
+      "category": "productivity",
+      "description": "발표·콘텐츠 생산"
     }
   ]
 }
