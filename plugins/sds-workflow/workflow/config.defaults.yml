@@ -1,0 +1,84 @@
+# sds-workflow 공통 기본값 — 저장소 비의존 섹션
+# 저장소별 override 는 `.team-workflow/workflow.yml` 에서 deep-merge.
+# 커맨드 Phase 0 에서 이 파일을 먼저 로드한다.
+
+jira:
+  transitions:
+    start:
+      from: TO DO
+      to: IN PROGRESS
+    resolve:
+      from: IN PROGRESS
+      to: RESOLVE
+
+branch:
+  # Jira 이슈 타입 → 커밋/브랜치 prefix 매핑
+  # 팀 commitlint type-enum 과 일치해야 함 (저장소별로 상이 시 override)
+  prefix_map:
+    Bug: fix
+    Task: feat
+    Story: feat
+    Improvement: refactor
+    Documentation: docs
+    Epic: feat
+    Sub-task: feat
+  slug:
+    max_words: 5
+    separator: "-"
+
+commit:
+  format: "{type}: {issue_key} {subject}"
+  types:
+    - feat
+    - fix
+    - docs
+    - style
+    - refactor
+    - test
+    - chore
+    - ci
+    - build
+    - revert
+
+mr:
+  title_format: "{type}: {issue_key} {subject}"
+  # ${CLAUDE_PLUGIN_ROOT} 는 커맨드가 런타임 치환
+  template_path: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/mr-template.md"
+  target_branch: main
+
+gitlab:
+  # 둘 다 빈 값이면 `git remote get-url remote-sds` 에서 파싱 (scheme://host/path 규칙).
+  # `remote-sds` 는 `/sds-workflow:init` Phase 4.5 가 자동 등록하는 팀 공용 고정 remote.
+  # glab 실패 시 프리필 URL 폴백 생성에 사용.
+  base_url: ""
+  project_path: ""
+
+plan:
+  template_path: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/plan-template.md"
+  work_context_path: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/work-context.md"
+  work_dir: .work
+  escape_hatch: "Trivial fix — no plan needed"
+
+validation:
+  static:
+    - pnpm run lint
+    - pnpm run type-check
+    - pnpm run test
+  ui_change_globs:
+    - src/views/**
+    - src/components/**
+    - src/assets/**
+    - src/locales/**
+  ui_verify_gif: ".work/{issue_key}-verify-ui.gif"
+
+context:
+  # /pick Phase 0 에서 로드할 명시적 규칙 문서. 기술 스택·아키텍처는 런타임 추론.
+  conventions_path: .team-workflow/CONVENTIONS.md
+
+recap:
+  jira_comment_template: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/recap-comment.md"
+  page_template: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/recap-page.md"
+  default_confluence: false
+
+draft:
+  issue_template: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/draft-issue.md"

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "chanshin0-sds",
+  "description": "SDS 팀 워크플로우 marketplace (private). sds-workflow plugin + 큐레이션된 개인 skills",
+  "owner": {
+    "name": "Dongchan"
+  },
+  "plugins": [
+    {
+      "name": "sds-workflow",
+      "source": "./plugins/sds-workflow",
+      "category": "productivity",
+      "description": "Jira → Claude Code → GitLab MR 워크플로우 (pick/ship/land/recap/where/draft/autopilot/tune/init)"
+    }
+  ]
+}
