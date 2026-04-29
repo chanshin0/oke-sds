@@ -11,6 +11,21 @@
       "source": "./plugins/sds-workflow",
       "category": "productivity",
       "description": "Jira → Claude Code → GitLab MR 워크플로우 (pick/ship/land/recap/where/draft/autopilot/tune/init)"
+    },
+    {
+      "name": "chanshin0-skills-work",
+      "source": {
+        "source": "github",
+        "repo": "chanshin0/cc-skills-repo"
+      },
+      "skills": [
+        "./skills/self-review",
+        "./skills/improve-token-efficiency",
+        "./skills/ai-readiness-cartography"
+      ],
+      "strict": false,
+      "category": "productivity",
+      "description": "회사 업무용으로 큐레이션된 chanshin0 개인 스킬 모음"
     }
   ]
 }
