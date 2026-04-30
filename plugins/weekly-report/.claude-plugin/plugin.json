@@ -1,7 +1,6 @@
 {
   "name": "weekly-report",
   "description": "Confluence 주간보고 자동화 — 신주차 페이지 생성 + Jira 데이터 자동 채움",
-  "version": "0.1.0",
   "author": {
     "name": "chanshin0"
   },

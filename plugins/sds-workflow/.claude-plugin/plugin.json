@@ -1,7 +1,6 @@
 {
   "name": "sds-workflow",
-  "description": "Generic Jira → Claude Code → GitLab MR workflow (pick/ship/land/recap)",
-  "version": "0.4.0",
+  "description": "Generic Jira → Claude Code → GitLab MR workflow (pick/ship/land)",
   "author": {
     "name": "chanshin0"
   },
