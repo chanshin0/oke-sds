@@ -181,8 +181,10 @@ function main() {
 
   log("");
   if (!args.global) {
-    log(`${c.bold}Tip${c.reset} ${c.dim}— commit .claude/settings.json so teammates get marketplace access automatically:${c.reset}`);
+    log(`${c.bold}Share with team?${c.reset} ${c.dim}(optional — only if this repo is shared)${c.reset}`);
+    log(`  ${c.dim}Commit .claude/settings.json so teammates skip this step on clone:${c.reset}`);
     log(`  ${c.cyan}git add .claude/settings.json && git commit -m "chore: register oke-sds marketplace"${c.reset}`);
+    log(`  ${c.dim}If this is a personal/solo repo, leave the file uncommitted (or gitignore it).${c.reset}`);
     log("");
   }
   log(`${c.bold}Next steps${c.reset} ${c.dim}(in Claude Code, inside your project)${c.reset}`);
