@@ -35,7 +35,7 @@
 
           | 호출 컨텍스트 | 동작 |
           |---|---|
-          | **autopilot** (`/sds-workflow:autopilot`) | **즉시 중단** — `AskUserQuestion` 없이 명시적 fail. 메시지: "프로젝트 키 `{prefix}` 가 project_keys 에 없습니다. 자율 운행 안전 차원에서 중단. workflow.yml 수동 갱신 후 재실행." |
+          | **autopilot** (`/sds-workflow:autopilot`) | **세션 일회성 허용** — workflow.yml 수정 X, SESSION_PROJECT_KEY 만 적용하고 진행. stderr 로그: "프로젝트 키 `{prefix}` 가 project_keys 에 없음. 세션 일회성 적용. 영구 등록 원하면 사용자가 수동으로 workflow.yml 갱신." |
           | **그 외** (pick / ship / land / recap / draft) | **AskUserQuestion** 으로 사용자 결정: |
 
           AskUserQuestion (autopilot 외):
@@ -57,7 +57,7 @@
    - 인자 없는 커맨드 (예: `/where`) 는 PROJECT_KEYS[0] 을 default 로 사용 (와일드카드면 미정).
    - 모든 후속 변수 치환 (`${PROJECT_KEY}`) 은 SESSION_PROJECT_KEY 로 해석.
 
-   **autopilot 분기 이유**: 자율 운행 중 silent 로 workflow.yml 변경하면 사용자 의도와 다를 수 있고, 다중 모드에서 race condition. 명시적 fail 이 안전.
+   **autopilot 분기 이유**: 자율 운행은 끝까지 진행이 우선. 다만 silent 로 workflow.yml 자동 갱신은 다중 모드에서 race condition + 사용자 의도 어긋날 위험 → workflow.yml 은 건드리지 않고 세션 일회성으로만 허용. 영구 등록은 사용자가 명시적으로 (a) 분기로 호출해서 처리.
 
 6. 본문의 `PROJ-XXXX` 표기는 `${PROJECT_KEY}-XXXX` 의 **예시**. 실제 런타임에는 위에서 결정된 SESSION_PROJECT_KEY 를 사용한다.
 
