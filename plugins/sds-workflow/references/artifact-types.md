@@ -44,7 +44,7 @@
 
 ### `commands/*.md`
 
-- **위치**: `plugin/sds-workflow/commands/{pick,ship,land,recap,where,draft,autopilot,tune,init}.md`
+- **위치**: `plugin/sds-workflow/commands/{pick,ship,land,where,draft,autopilot,tune,init}.md`
 - **소유자**: 플러그인
 - **구조**:
   - frontmatter: `description`, `argument-hint`
@@ -64,7 +64,7 @@
 - **위치**: `plugin/sds-workflow/workflow/preamble.md`
 - **소유자**: 플러그인
 - **목적**: 모든 커맨드(init 제외)가 본문 Phase 전에 수행하는 config 로드 절차. **SSOT**.
-- **Consumed by**: `pick`, `ship`, `land`, `recap`, `where`, `draft`, `autopilot`, `tune` (총 8개)
+- **Consumed by**: `pick`, `ship`, `land`, `where`, `draft`, `autopilot`, `tune` (총 8개)
 - **Sync with**:
   - `workflow/config.defaults.yml` — 추출 변수 키 변경 시
   - `CHANGELOG.md` — 변경 전파 영향이 커 기록 필수
@@ -81,13 +81,12 @@
 
 ### `workflow/templates/*.md`
 
-- **위치**: `plugin/sds-workflow/workflow/templates/{plan,mr,work-context,recap-comment,recap-page,draft-issue}.md`
+- **위치**: `plugin/sds-workflow/workflow/templates/{plan,mr,work-context,draft-issue,jira-comment-pick,jira-comment-implement,jira-comment-ship}.md`
 - **소유자**: 플러그인
 - **Consumed by**:
   - `plan-template.md` → `/sds-workflow:pick` (Phase 3 플랜 초안)
   - `mr-template.md` → `/sds-workflow:ship` (MR 본문)
   - `work-context.md` → `/sds-workflow:pick` (.work/{issue_key}.md 생성)
-  - `recap-comment.md` / `recap-page.md` → `/sds-workflow:recap`
   - `draft-issue.md` → `/sds-workflow:draft`
 - **Sync with**: 해당 소비 커맨드의 Phase 단계 — 템플릿 섹션 추가/변경 시 커맨드가 섹션을 채우는 로직도 수정
 
@@ -170,8 +169,8 @@
 - **위치**: 저장소 루트 `.work/{issue_key}.md` (gitignore)
 - **소유자**: 저장소 (ephemeral)
 - **목적**: 이슈별 작업 컨텍스트 (상태 블록·플랜·MR URL·기능 개요).
-- **Lifecycle**: `/sds-workflow:pick` 생성, `ship`/`land`/`recap` 에서 상태 블록 갱신. 머지 완료 후 archival 은 저장소 자율.
-- **Consumed by**: `pick` (create/update), `ship` (update), `land` (update), `recap` (read), `where` (read)
+- **Lifecycle**: `/sds-workflow:pick` 생성, `ship`/`land` 에서 상태 블록 갱신. 머지 완료 후 archival 은 저장소 자율.
+- **Consumed by**: `pick` (create/update), `ship` (update), `land` (update), `where` (read)
 - **템플릿**: `workflow/templates/work-context.md`
 - **Sync with**: `work-context.md` 템플릿 변경 시 이 파일을 갱신하는 커맨드들의 Phase 로직도 검토
 

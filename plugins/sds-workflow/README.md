@@ -2,7 +2,7 @@
 
 Generic Jira → Claude Code → GitLab MR 워크플로우 플러그인.
 
-`acli` (Atlassian CLI) → Claude Code → `glab` (GitLab CLI) 의 **집기(pick) → 출하(ship) → 착륙(land) → 보고(recap)** 파이프라인을 표준화. 상세 설계는 `SPEC.md` 참조.
+`acli` (Atlassian CLI) → Claude Code → `glab` (GitLab CLI) 의 **집기(pick) → 출하(ship) → 착륙(land)** 파이프라인을 표준화. 상세 설계는 `SPEC.md` 참조.
 
 ## 사전 요구사항
 
@@ -66,7 +66,6 @@ Generic Jira → Claude Code → GitLab MR 워크플로우 플러그인.
 | `/sds-workflow:pick PROJ-XXXX` | Jira 이슈 가져오기 — 컨텍스트 수집 → 브랜치 생성 → Jira 전환 → 플랜 자동 초안 → 플랜 모드 진입 |
 | `/sds-workflow:ship` | 검증(테스트) → 커밋 → 푸시 → MR 등록 → Jira 코멘트 원샷 |
 | `/sds-workflow:land PROJ-XXXX` | MR 수동 머지 후 — Jira RESOLVE 전환 + 로컬 정리 |
-| `/sds-workflow:recap PROJ-XXXX [--confluence]` | land 완료 후 결과 및 조치 내용 초안 — Jira 결과 코멘트, 선택적 Confluence 페이지 |
 | `/sds-workflow:where` | 현재 상태를 감지해 다음 액션 안내 |
 | `/sds-workflow:draft "자유 프롬프트"` | 신규 Jira 이슈 초안 — 자유 프롬프트 → 5섹션 구조화 + 중복 탐지. authorship footer 자동 첨부 |
 | `/sds-workflow:autopilot PROJ-XXXX [PROJ-YYYY ...] [--stop-at <phase>]` | 자율 운행 — pick → 구현 → ship 원샷. 끝까지 자율 (승인 게이트 없음). 다중 이슈 시 worktree 격리 + subagent 병렬. Phase A-3 / B-2 페이지 코멘트 자동 post |
@@ -92,7 +91,7 @@ sds-workflow/
 ├── workflow/
 │   ├── preamble.md           # 공통 설정 로드 절차 SSOT
 │   ├── config.defaults.yml   # 공통 기본값 (transitions/prefix_map/validation 등)
-│   ├── templates/            # plan/mr/work-context/draft-issue/recap/jira-comment-pick/implement/ship
+│   ├── templates/            # plan/mr/work-context/draft-issue/jira-comment-pick/implement/ship
 │   └── seeds/                # /init 가 새 저장소로 복사하는 씨앗
 ├── scripts/                  # 결정성 보장용 외부화 로직
 │   ├── create-mr.sh          # /ship MR 생성 (REST API → glab → 프리필 URL 3-layer 폴백)
@@ -128,7 +127,7 @@ sds-workflow/
 
 | 허용 패턴 | 사용 커맨드 |
 |---|---|
-| `Bash(acli:*)` | pick · ship · land · recap · draft · autopilot |
+| `Bash(acli:*)` | pick · ship · land · draft · autopilot |
 | `Bash(glab:*)` | ship |
 | `Bash(git:*)` | 모두 |
 | `Bash(pnpm:*)` 또는 `Bash(npm:*)` 등 | ship (Phase 1 정적 검증) |

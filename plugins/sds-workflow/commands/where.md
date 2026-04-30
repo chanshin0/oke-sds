@@ -61,9 +61,8 @@ argument-hint: "[--force] [--dry-run]"
 | F | 이슈 브랜치 + MR `opened` | "리뷰 대기 중. 머지 후 `/land {issue_key}`" |
 | G | 이슈 브랜치 + MR `merged` + Jira `IN PROGRESS` | "`/land {issue_key}` — Jira RESOLVE 전환 + 정리" |
 | H | 이슈 브랜치 + MR `merged` + Jira `RESOLVE` + `main` 미 체크아웃 | "정리만 남음: `git checkout main && git pull && git branch -d {branch}`" |
-| I | `.work/{issue_key}.md` 상태 `Merged` 이면서 `Recapped` 아님 | "`/recap {issue_key}` — Jira 결과 보고 코멘트 작성" |
 
-매칭 조건이 여러 개면 **더 진행된 상태** 를 선택 (I > G > F > E > D > C > B > A).
+매칭 조건이 여러 개면 **더 진행된 상태** 를 선택 (H > G > F > E > D > C > B > A).
 
 ## Step 4: 안전 게이트
 
@@ -102,7 +101,7 @@ argument-hint: "[--force] [--dry-run]"
 
 제안 액션 출력 후 **즉시 해당 커맨드 실행 제안** (AskUserQuestion 으로 실행 여부 확인).
 
-- `/pick` / `/ship` / `/land` / `/recap` 는 본 명령 내부에서 직접 실행하지 않고, 사용자에게 "다음 커맨드 입력" 을 유도 (슬래시 커맨드는 사용자가 호출).
+- `/pick` / `/ship` / `/land` 는 본 명령 내부에서 직접 실행하지 않고, 사용자에게 "다음 커맨드 입력" 을 유도 (슬래시 커맨드는 사용자가 호출).
 
 ---
 

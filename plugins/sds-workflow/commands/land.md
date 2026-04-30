@@ -43,7 +43,7 @@ argument-hint: "CDS-XXXX"
 ## Phase 3: `.work/{issue_key}.md` 상태 갱신
 
 - 상태 블록: `MR-ed` → `Merged`
-- 다음 액션: "완료 보고 (`/recap`)"
+- 다음 액션: "완료"
 - MR 섹션에 `머지 완료` 표시
 
 ## Phase 4: Handoff
@@ -54,10 +54,8 @@ argument-hint: "CDS-XXXX"
 │   Jira: RESOLVE                              │
 │   로컬 브랜치 보존: {branch}                   │
 │                                               │
-│ 다음: 결과 보고 → /recap {issue_key}        │
-│       (Confluence 까지 → /recap {issue_key} --confluence) │
-│       또는 다음 이슈 → /pick CDS-YYYY      │
-│       상태 확인 → /where                   │
+│ 다음: 다음 이슈 → /pick PROJ-YYYY            │
+│       상태 확인 → /where                     │
 └──────────────────────────────────────────────┘
 ```
 
@@ -75,4 +73,4 @@ argument-hint: "CDS-XXXX"
 - **파괴적 작업 금지**: `git branch -D`, `git reset --hard`, force push 등.
 - **로컬 작업 내역 보존**: 머지된 브랜치를 자동 삭제하지 않는다. 재참조·cherry-pick·히스토리 추적 여지를 남긴다. 사용자가 원할 때 수동으로 정리.
 - MR 미머지 상태에서는 RESOLVE 전환 금지.
-- **착륙만 담당**. 결과 보고·Confluence 는 `/recap` 이 담당.
+- **착륙만 담당** — 머지 후 Jira RESOLVE 전환 + 로컬 정리.

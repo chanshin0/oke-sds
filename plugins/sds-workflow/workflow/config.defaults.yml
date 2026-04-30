@@ -72,11 +72,6 @@ context:
   # /pick Phase 0 에서 로드할 명시적 규칙 문서.
   conventions_path: .team-workflow/CONVENTIONS.md
 
-recap:
-  jira_comment_template: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/recap-comment.md"
-  page_template: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/recap-page.md"
-  default_confluence: false
-
 draft:
   issue_template: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/draft-issue.md"
 

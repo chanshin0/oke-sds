@@ -2,6 +2,11 @@
 
 이 문서는 팀의 Jira→Claude Code→GitLab MR→배포 플로우에 얹는 얇은 워크플로우 레이어의 단일 출처(single source of truth)다. 커맨드·템플릿 수정 시 본 문서도 함께 갱신한다.
 
+> **⚠️ v0.4.0 변경 — `/recap` 비활성화**
+>
+> `/sds-workflow:recap` 커맨드는 v0.4.0 에서 **제거**됐다. 검증 부족 + 사용 빈도 낮음.
+> 본 SPEC 의 recap 관련 섹션 (§/recap, Stage 2 보고서, recap-comment/page 템플릿 등) 은 **역사적 참고용**이며 현재 plugin 에는 구현되지 않음. 추후 검증 후 재도입 가능.
+
 ## Context
 
 현재 팀의 작업 플로우는 **Jira(Atlassian) → Claude Code → GitLab MR → 트롬본 배포** 구조로 단계 수 자체는 적절하나 다음 문제가 있다.

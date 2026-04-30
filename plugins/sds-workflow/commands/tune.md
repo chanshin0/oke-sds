@@ -45,7 +45,7 @@ argument-hint: "\"자유 형식 피드백\" | --review"
    - 예: `command description` 변경 → 규칙 1 적용 → `README.md` 커맨드 표 + `SPEC.md` 커맨드 표 자동 포함.
    - 예: 카테고리 enum 변경 → 규칙 2 적용 → `commands/tune.md` Phase 1 리스트 + `seeds/tune-log.md` + `.team-workflow/tune-log.md` format 줄 자동 포함.
    - 누락 시 같은 피드백이 다른 파일에서 재발하므로 **자동 확장 결과는 Phase 3 확인창에 명시 출력**.
-3. **리스크** — 기존 파일럿 E2E (`pick → ship → land → recap`) 에 영향 가능성.
+3. **리스크** — 기존 파일럿 E2E (`pick → ship → land`) 에 영향 가능성.
 4. **상태 초기값 판정** (conventions §2 enum 사용):
    - E2E 에 영향 없음 → `applied` 후보
    - E2E 에 영향 가능 → `needs-e2e` 후보 (사용자 확인 후 적용 여부 결정)

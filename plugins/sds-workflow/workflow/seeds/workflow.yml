@@ -18,7 +18,7 @@ gitlab:
   project_path: "{{GITLAB_PROJECT_PATH}}"
 
 confluence:
-  # 선택 — /recap --confluence 사용 시 기본 대상
+  # 선택 — weekly-report plugin 사용 시 기본 대상
   base_url: "{{CONFLUENCE_BASE_URL}}"
   space_key: "{{CONFLUENCE_SPACE_KEY}}"
   parent_id: ""

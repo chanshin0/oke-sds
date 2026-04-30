@@ -36,7 +36,7 @@
           | 호출 컨텍스트 | 동작 |
           |---|---|
           | **autopilot** (`/sds-workflow:autopilot`) | **세션 일회성 허용** — workflow.yml 수정 X, SESSION_PROJECT_KEY 만 적용하고 진행. stderr 로그: "프로젝트 키 `{prefix}` 가 project_keys 에 없음. 세션 일회성 적용. 영구 등록 원하면 사용자가 수동으로 workflow.yml 갱신." |
-          | **그 외** (pick / ship / land / recap / draft) | **AskUserQuestion** 으로 사용자 결정: |
+          | **그 외** (pick / ship / land / draft) | **AskUserQuestion** 으로 사용자 결정: |
 
           AskUserQuestion (autopilot 외):
           > "프로젝트 키 `{prefix}` 가 `.team-workflow/workflow.yml` 의 `jira.project_keys` 에 없습니다. 어떻게 처리할까요?"

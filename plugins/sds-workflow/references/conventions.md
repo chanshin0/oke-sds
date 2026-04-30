@@ -13,7 +13,7 @@
 | 카테고리 | 범위 | 소유자 | 대상 경로 |
 |---|---|---|---|
 | `command-behavior` | 특정 `sds-*` 커맨드 동작 | 플러그인 | `plugin/sds-workflow/commands/{name}.md` |
-| `template` | plan/mr/recap/draft/work-context 템플릿 | 플러그인 | `plugin/sds-workflow/workflow/templates/*.md` |
+| `template` | plan/mr/draft/work-context/jira-comment 템플릿 | 플러그인 | `plugin/sds-workflow/workflow/templates/*.md` |
 | `config` | 공통 기본값 | 플러그인 | `plugin/sds-workflow/workflow/config.defaults.yml` |
 | `config-local` | 저장소별 override | 저장소 | `.team-workflow/workflow.yml` |
 | `design-principle` | 철학·확정 사항 | 플러그인 | `plugin/sds-workflow/SPEC.md` |
@@ -77,7 +77,7 @@ tune-log 엔트리 `상태:` 필드 값.
 
 ## 5. acli 사전 점검 표준
 
-acli 의존 Phase 를 가진 커맨드(pick/ship/land/recap/draft)는 공통 감지 절차 사용.
+acli 의존 Phase 를 가진 커맨드(pick/ship/land/draft)는 공통 감지 절차 사용.
 
 **감지**:
 ```bash
@@ -92,7 +92,6 @@ acli jira auth status      # 인증 확인 (설치됐을 때만)
 | `pick` | **중단** + 설치·인증 안내 (Jira 조회 불가로 Phase 1 불가) |
 | `ship` | Phase 0 통과, Phase 5 Jira 코멘트 단계에서 스킵 + Handoff 에 "수동 필요" 표기 |
 | `land` | Phase 2 Jira 전환 스킵, git 정리만 수행 + Handoff 에 "Jira RESOLVE: 수동 필요" 표기 |
-| `recap` | 경고만 + Phase 4 에서 `.work/{issue_key}-recap-comment.md` 로 초안 저장 |
 | `draft` | 경고만 + Phase 2 중복 탐지 스킵 + Phase 5 `.work/drafts/{timestamp}.md` 로 초안 저장 |
 
 Preamble 완료 후 Phase 0 초반에 감지하고, 결과를 세션 변수로 보관해 뒤 Phase 들이 참조한다.

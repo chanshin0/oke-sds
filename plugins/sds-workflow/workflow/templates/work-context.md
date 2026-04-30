@@ -6,12 +6,12 @@
 ## 메타
 <!-- 각 커맨드가 실행 시 자동 갱신 -->
 
-- 단계: Planning | Implementing | Verifying | MR-ed | MR-pending | Merged | Recapped
+- 단계: Planning | Implementing | Verifying | MR-ed | MR-pending | Merged
 - 브랜치: {type}/{issue_key}-{slug}
 - Jira 상태: TO DO | IN PROGRESS | RESOLVE
 - 검증: lint — / type-check — / test — / ui —
 - 최근 업데이트: {YYYY-MM-DD HH:MM}
-- 다음 액션: /sds-workflow:pick | :ship | :land | :recap
+- 다음 액션: /sds-workflow:pick | :ship | :land
 
 ## 메트릭
 <!-- /pick · /autopilot Phase 0 가 자동 기록. /ship · /autopilot 페이즈 코멘트가 누적 시간 합성에 사용.
@@ -69,7 +69,4 @@
 - 머지 SHA:
 - 머지 시각:
 
-## 회고 (by /recap)
-<!-- 실행 시 채움. 템플릿 외 섹션 자의 추가 금지 -->
-- Jira 결과 코멘트: (post 시각 / 코멘트 ID)
-- Confluence 페이지: (--confluence 사용 시만, page ID / URL)
+<!-- 회고 섹션은 v0.4.0 에서 /recap 비활성화와 함께 제거. 추후 재도입 시 부활. -->
