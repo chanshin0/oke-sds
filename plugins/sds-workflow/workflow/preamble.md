@@ -24,10 +24,35 @@
    - `PROJECT_KEYS` 가 비어있거나 `["*"]` → 느슨 검증: `^[A-Z][A-Z0-9]+-\d+$` (모든 uppercase prefix 허용)
    - 그 외 array → 엄격 검증: `^(KEY1|KEY2|...)-\d+$`
 
-5. **세션 PROJECT_KEY 결정**:
-   - 커맨드가 issue_key 인자 (예: `PROJ-123`) 를 받으면 prefix 추출 → `SESSION_PROJECT_KEY = "PROJ"`
-   - 인자 없는 커맨드 (예: `/where`) 는 PROJECT_KEYS[0] 을 default 로 사용
-   - 모든 후속 변수 치환 (`${PROJECT_KEY}`) 은 SESSION_PROJECT_KEY 로 해석
+5. **세션 PROJECT_KEY 결정 + 자동 등록 분기**:
+
+   - 커맨드가 issue_key 인자 (예: `PROJ-123`) 를 받음:
+     1. prefix 추출 → 후보 `SESSION_PROJECT_KEY = "PROJ"`
+     2. PROJECT_KEYS 검증:
+        - `PROJECT_KEYS == ["*"]` 또는 비어있음 → 통과 (느슨 모드, silent)
+        - `prefix in PROJECT_KEYS` → 통과
+        - **prefix 미포함 시 AskUserQuestion**:
+          > "프로젝트 키 `{prefix}` 가 `.team-workflow/workflow.yml` 의 `jira.project_keys` 에 없습니다. 어떻게 처리할까요?"
+          >
+          > 옵션:
+          > - **(a) workflow.yml 에 추가** — Edit 툴로 `project_keys` array 에 `{prefix}` 추가 (다른 항목 보존) + 진행
+          > - **(b) 이 세션만 일회성 허용** — workflow.yml 수정 안 하고 SESSION_PROJECT_KEY 만 적용
+          > - **(c) 중단** — 커맨드 종료
+
+       (a) 선택 시 Edit 절차:
+       ```
+       Edit .team-workflow/workflow.yml:
+         old: project_keys: ["CDS"]
+         new: project_keys: ["CDS", "FOO"]
+       ```
+       또는 wildcard 인 경우:
+       ```
+         old: project_keys: ["*"]
+         (변경 없음 — 와일드카드는 모두 허용이므로)
+       ```
+
+   - 인자 없는 커맨드 (예: `/where`) 는 PROJECT_KEYS[0] 을 default 로 사용 (와일드카드면 미정).
+   - 모든 후속 변수 치환 (`${PROJECT_KEY}`) 은 SESSION_PROJECT_KEY 로 해석.
 
 6. 본문의 `PROJ-XXXX` 표기는 `${PROJECT_KEY}-XXXX` 의 **예시**. 실제 런타임에는 위에서 결정된 SESSION_PROJECT_KEY 를 사용한다.
 
