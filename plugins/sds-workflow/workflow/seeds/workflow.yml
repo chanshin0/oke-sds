@@ -3,15 +3,17 @@
 # /init 가 이 파일을 생성하며 AskUserQuestion 으로 값을 채운다.
 
 jira:
-  # 필수 — 이 저장소가 다루는 Jira 프로젝트 키 (예: CDS, PROJ)
-  project_key: "{{PROJECT_KEY}}"
-  # 필수 — Atlassian site URL (예: https://<your-team>.atlassian.net)
+  # 필수 — 이 저장소에서 다룰 Jira 프로젝트 키 목록.
+  # array 형태. 단일이어도 array (예: ["CDS"]).
+  # 비우거나 ["*"] 면 모든 uppercase prefix 허용 (느슨 검증).
+  project_keys: {{PROJECT_KEYS_JSON}}
+  # 필수 — Atlassian site URL (예: https://your-team.atlassian.net)
   base_url: "{{JIRA_BASE_URL}}"
 
 gitlab:
   # 선택 — MR 대상 GitLab 프로젝트 고정용. 다중 remote 환경에서 glab 이 엉뚱한
   # 프로젝트를 선택하는 문제 방지. 비우면 create-mr.sh 가 `remote-sds` URL 에서 파싱.
-  # (`remote-sds` 는 /sds-workflow:init Phase 4.5 가 자동 등록)
+  # /sds-workflow:init Phase 2.0 이 origin URL 에서 자동 추출.
   base_url: "{{GITLAB_BASE_URL}}"
   project_path: "{{GITLAB_PROJECT_PATH}}"
 

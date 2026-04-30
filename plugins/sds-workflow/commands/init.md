@@ -50,20 +50,27 @@ Parse 규칙 (모두 `<base_url>` + `<project_path>` 두 변수로 분해):
 
 ## Phase 2: 대화형 초기값 수집 (AskUserQuestion)
 
-다음 항목을 한 번에 물어본다.
+기본 항목 (항상 묻기):
 
 | 키 | 질문 | 기본값 |
 |---|---|---|
-| `project_key` | 이 저장소가 다루는 Jira 프로젝트 키 (예: PROJ) | (없음, 필수) |
+| `project_keys` | 이 저장소가 다룰 Jira 프로젝트 키 목록. 콤마 구분 (예: `PROJ` 또는 `PROJ, FOO`). `*` 또는 빈 값 → 모든 uppercase prefix 허용 | (필수, 빈 값이면 `*`) |
 | `jira.base_url` | Atlassian site URL | `https://<your-team>.atlassian.net` |
-| `gitlab.base_url` | GitLab site URL (MR 생성 대상. Phase 4.5 가 이 값으로 `remote-sds` 를 등록) | `${DEFAULT_GITLAB_BASE_URL}` (origin 에서 자동 추출) |
-| `gitlab.project_path` | GitLab 프로젝트 경로 `OWNER/REPO` (다중 remote 환경 시 필수 — glab 이 엉뚱한 프로젝트 선택 방지) | `${DEFAULT_GITLAB_PROJECT_PATH}` (origin 에서 자동 추출) |
 | `confluence.base_url` | Confluence site URL | `https://<your-team>.atlassian.net/wiki` |
 | `confluence.space_key` | Confluence space key (선택, 비우면 `--confluence` 미사용) | 빈 값 |
 
+조건부 항목 (Phase 2.0 자동 감지 결과에 따라 분기):
+
+- **`DEFAULT_GITLAB_BASE_URL` 과 `DEFAULT_GITLAB_PROJECT_PATH` 둘 다 비어있지 않음** (origin 자동 감지 성공):
+  → `gitlab.*` 질문 **스킵**. 자동 감지값 그대로 사용. 사용자에겐 정보성 출력:
+  > "✓ origin 에서 자동 감지: gitlab.base_url=`${DEFAULT_GITLAB_BASE_URL}`, gitlab.project_path=`${DEFAULT_GITLAB_PROJECT_PATH}`"
+
+- **둘 중 하나 이상 비어있음** (origin 없거나 GitLab 패턴 미일치):
+  → `gitlab.base_url` 와 `gitlab.project_path` 를 추가로 물음. default 는 자동 감지로 채워진 부분만.
+
 **검증**:
-- `project_key`: 정규식 `^[A-Z][A-Z0-9]+$` 위반 시 재질문
-- `gitlab.base_url`: `^(https?://[^/]+|git@[^:]+:?)$` 패턴 권장 (위반 시 경고만, 진행 가능)
+- `project_keys`: 콤마 split 후 각 토큰이 정규식 `^[A-Z][A-Z0-9]+$` 통과. `*` 또는 빈 값은 통과 (느슨 모드).
+- `gitlab.base_url`: `^(https?://[^/]+|git@[^:]+:?)$` 패턴 권장 (위반 시 경고만)
 - `gitlab.project_path`: 슬래시 1개 이상 포함 + 선두 슬래시·`.git` 접미 금지 (위반 시 재질문)
 
 ## Phase 3: 씨앗 복사 (Bash, 병렬 안전)
@@ -81,10 +88,12 @@ cp -n "${CLAUDE_PLUGIN_ROOT}/workflow/seeds/tune-log.md"        .team-workflow/t
 
 Phase 2 에서 수집한 값으로 `.team-workflow/workflow.yml` 의 플레이스홀더를 치환한다 (Edit 툴).
 
-- `{{PROJECT_KEY}}` → 수집값
+- `{{PROJECT_KEYS_JSON}}` → 수집값 array 의 JSON 표현
+  - 콤마 split 결과 array 화: `"PROJ, FOO"` → `["PROJ", "FOO"]`
+  - `*` 또는 빈 값 → `["*"]`
 - `{{JIRA_BASE_URL}}` → 수집값
-- `{{GITLAB_BASE_URL}}` → 수집값 (빈 값이면 빈 문자열)
-- `{{GITLAB_PROJECT_PATH}}` → 수집값 (빈 값이면 빈 문자열)
+- `{{GITLAB_BASE_URL}}` → 수집값 또는 자동 감지값 (둘 다 빈 값이면 빈 문자열)
+- `{{GITLAB_PROJECT_PATH}}` → 동일
 - `{{CONFLUENCE_BASE_URL}}` → 수집값
 - `{{CONFLUENCE_SPACE_KEY}}` → 수집값 (빈 값이면 빈 문자열)
 

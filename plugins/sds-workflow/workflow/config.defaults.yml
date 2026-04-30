@@ -1,6 +1,9 @@
 # sds-workflow 공통 기본값 — 저장소 비의존 섹션
 # 저장소별 override 는 `.team-workflow/workflow.yml` 에서 deep-merge.
 # 커맨드 Phase 0 에서 이 파일을 먼저 로드한다.
+#
+# 슬림 정책: override 빈도 0 인 키들은 코드 상수로 박음.
+# 여기에 남은 것들은 "저장소별로 다를 수 있는" 값만.
 
 jira:
   transitions:
@@ -22,12 +25,9 @@ branch:
     Documentation: docs
     Epic: feat
     Sub-task: feat
-  slug:
-    max_words: 5
-    separator: "-"
 
 commit:
-  format: "{type}: {issue_key} {subject}"
+  # 허용 type 목록. 저장소별 commitlint 와 일치해야 하므로 override 가능.
   types:
     - feat
     - fix
@@ -41,15 +41,13 @@ commit:
     - revert
 
 mr:
-  title_format: "{type}: {issue_key} {subject}"
   # ${CLAUDE_PLUGIN_ROOT} 는 커맨드가 런타임 치환
   template_path: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/mr-template.md"
   target_branch: main
 
 gitlab:
-  # 둘 다 빈 값이면 `git remote get-url remote-sds` 에서 파싱 (scheme://host/path 규칙).
-  # `remote-sds` 는 `/sds-workflow:init` Phase 4.5 가 자동 등록하는 팀 공용 고정 remote.
-  # glab 실패 시 프리필 URL 폴백 생성에 사용.
+  # 둘 다 빈 값이면 `git remote get-url remote-sds` 에서 파싱.
+  # `/sds-workflow:init` Phase 2.0 이 origin URL 에서 자동 추출.
   base_url: ""
   project_path: ""
 
@@ -57,7 +55,6 @@ plan:
   template_path: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/plan-template.md"
   work_context_path: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/work-context.md"
   work_dir: .work
-  escape_hatch: "Trivial fix — no plan needed"
 
 validation:
   static:
@@ -72,7 +69,7 @@ validation:
   ui_verify_gif: ".work/{issue_key}-verify-ui.gif"
 
 context:
-  # /pick Phase 0 에서 로드할 명시적 규칙 문서. 기술 스택·아키텍처는 런타임 추론.
+  # /pick Phase 0 에서 로드할 명시적 규칙 문서.
   conventions_path: .team-workflow/CONVENTIONS.md
 
 recap:
@@ -82,3 +79,10 @@ recap:
 
 draft:
   issue_template: "${CLAUDE_PLUGIN_ROOT}/workflow/templates/draft-issue.md"
+
+# 코드 상수 (override 불가, 참고용 표기):
+#   commit.format = "{type}: {issue_key} {subject}"   ← 코드에 박음
+#   mr.title_format = "{type}: {issue_key} {subject}" ← 코드에 박음
+#   branch.slug.max_words = 5                         ← 코드에 박음
+#   branch.slug.separator = "-"                       ← 코드에 박음
+#   plan.escape_hatch = "Trivial fix — no plan needed" ← 코드에 박음
