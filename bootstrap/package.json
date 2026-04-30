@@ -1,6 +1,6 @@
 {
   "name": "oke-sds",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "One-shot bootstrapper for the chanshin0/oke-sds Claude Code marketplace.",
   "type": "module",
   "bin": {

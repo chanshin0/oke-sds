@@ -1,58 +1,55 @@
 # oke-sds
 
-One-shot bootstrapper for the [chanshin0/oke-sds](https://github.com/chanshin0/oke-sds) Claude Code marketplace.
+Claude Code marketplace bootstrapper for [chanshin0/oke-sds](https://github.com/chanshin0/oke-sds).
 
-## Usage
-
-```bash
-# Project scope (default) — writes to ./.claude/settings.json
-npx oke-sds
-
-# User-global scope — writes to ~/.claude/settings.json
-npx oke-sds --global
-
-npx oke-sds --help
-```
-
-## Project mode (default)
-
-Run inside your project. Adds `chanshin0/oke-sds` to `<cwd>/.claude/settings.json`.
+## Quick install
 
 ```bash
 cd my-project
 npx oke-sds
 ```
 
-### Commit only if the repo is team-shared
+이후 Claude Code 안에서:
 
-If this repo is shared with teammates and you want them to skip the bootstrap step on clone:
+```
+/plugin install sds-workflow@oke-sds
+/reload-plugins
+/sds-workflow:init
+```
+
+---
+
+### 머신 전역 적용
+
+```bash
+npx oke-sds --global   # ~/.claude/settings.json
+```
+
+### 팀 공유 레포일 때만 커밋
 
 ```bash
 git add .claude/settings.json
 git commit -m "chore: register oke-sds marketplace"
 ```
 
-After this, anyone who clones the repo gets the marketplace registered automatically — they only need to run `/plugin install sds-workflow@oke-sds` inside Claude Code.
+이후 clone 자는 `npx` 단계 불필요. 개인/솔로 레포면 커밋하지 말고 그대로 두거나 `.gitignore` 추가.
 
-If the repo is personal/solo, leave the file uncommitted (or add it to `.gitignore`).
-
-## Global mode
-
-Apply to every project on the machine.
+### 제거
 
 ```bash
-npx oke-sds --global
+npx oke-sds --uninstall              # project scope
+npx oke-sds --uninstall --global     # user-global scope
 ```
 
-## Next steps (in Claude Code)
+`extraKnownMarketplaces` 의 `oke-sds` 엔트리만 제거. 이미 `/plugin install` 한 플러그인은 그대로 — 빼려면 Claude Code 안에서:
 
 ```
-/plugin install sds-workflow@oke-sds
-/sds-workflow:init
+/plugin uninstall sds-workflow@oke-sds
+/plugin uninstall weekly-report@oke-sds
 ```
 
-## Behavior
+### 동작
 
-- Idempotent — safe to run multiple times.
-- Migrates legacy `okestro-sds` key automatically.
-- Zero dependencies. Node 18+.
+- Idempotent — 여러 번 실행해도 안전
+- 옛 `okestro-sds` 키 자동 마이그레이션
+- 의존성 0, Node 18+

@@ -41,10 +41,11 @@ function checkNode() {
 }
 
 function parseArgs(argv) {
-  const args = { global: false, help: false };
+  const args = { global: false, help: false, uninstall: false };
   for (const a of argv.slice(2)) {
     if (a === "--global" || a === "-g") args.global = true;
     else if (a === "--help" || a === "-h") args.help = true;
+    else if (a === "--uninstall") args.uninstall = true;
     else fail(`Unknown argument: ${a}`);
   }
   return args;
@@ -56,6 +57,7 @@ function printHelp() {
   log(`${c.bold}Usage${c.reset}`);
   log(`  npx oke-sds              ${c.dim}# project scope (./.claude/settings.json)${c.reset}`);
   log(`  npx oke-sds --global     ${c.dim}# user scope (~/.claude/settings.json)${c.reset}`);
+  log(`  npx oke-sds --uninstall  ${c.dim}# remove marketplace entry (combine with --global)${c.reset}`);
   log(`  npx oke-sds --help`);
   log("");
   log(`${c.bold}Project mode${c.reset} ${c.dim}(default)${c.reset}`);
@@ -64,6 +66,10 @@ function printHelp() {
   log("");
   log(`${c.bold}Global mode${c.reset}`);
   log(`  Writes to ~/.claude/settings.json — applies across all projects on this machine.`);
+  log("");
+  log(`${c.bold}Uninstall${c.reset}`);
+  log(`  Removes only the marketplace entry. Installed plugins are not touched`);
+  log(`  (run /plugin uninstall sds-workflow@oke-sds inside Claude Code for that).`);
 }
 
 function readSettings(path) {
@@ -78,6 +84,30 @@ function readSettings(path) {
 function writeSettings(path, settings) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, JSON.stringify(settings, null, 2) + "\n");
+}
+
+function unmergeMarketplace(settings) {
+  const existing =
+    settings.extraKnownMarketplaces &&
+    typeof settings.extraKnownMarketplaces === "object" &&
+    !Array.isArray(settings.extraKnownMarketplaces)
+      ? { ...settings.extraKnownMarketplaces }
+      : null;
+
+  if (!existing || !(MARKETPLACE_KEY in existing)) {
+    return { settings, removed: false };
+  }
+
+  delete existing[MARKETPLACE_KEY];
+
+  const next = { ...settings };
+  if (Object.keys(existing).length === 0) {
+    delete next.extraKnownMarketplaces;
+  } else {
+    next.extraKnownMarketplaces = existing;
+  }
+
+  return { settings: next, removed: true };
 }
 
 function mergeMarketplace(settings) {
@@ -160,11 +190,28 @@ function main() {
 
   const settingsPath = resolveSettingsPath(args.global);
   const scopeLabel = args.global ? "user-global" : "project";
+  const modeLabel = args.uninstall ? "uninstall" : "bootstrap";
 
-  log(`${c.bold}oke-sds bootstrapper${c.reset} ${c.dim}(${scopeLabel} scope)${c.reset}`);
+  log(`${c.bold}oke-sds ${modeLabel}${c.reset} ${c.dim}(${scopeLabel} scope)${c.reset}`);
   log(`${c.dim}Target: ${settingsPath}${c.reset}\n`);
 
   const current = readSettings(settingsPath);
+
+  if (args.uninstall) {
+    const { settings, removed } = unmergeMarketplace(current);
+    if (removed) {
+      writeSettings(settingsPath, settings);
+      log(`${c.green}✓${c.reset} Removed "${MARKETPLACE_KEY}" from extraKnownMarketplaces`);
+    } else {
+      log(`${c.yellow}•${c.reset} "${MARKETPLACE_KEY}" not registered — nothing to do`);
+    }
+    log("");
+    log(`${c.bold}Cleanup complete.${c.reset} ${c.dim}To also remove installed plugins:${c.reset}`);
+    log(`  ${c.cyan}/plugin uninstall sds-workflow@oke-sds${c.reset}`);
+    log(`  ${c.cyan}/plugin uninstall weekly-report@oke-sds${c.reset}`);
+    return;
+  }
+
   const { settings, added, removedLegacy } = mergeMarketplace(current);
 
   if (added || removedLegacy) {
