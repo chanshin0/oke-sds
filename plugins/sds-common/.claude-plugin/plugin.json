@@ -1,0 +1,8 @@
+{
+  "name": "sds-common",
+  "description": "특정 업무에 묶이지 않는 공유 커맨드 + 스킬 모음 (sds-workflow / weekly-report 와 독립)",
+  "author": {
+    "name": "chanshin0"
+  },
+  "license": "MIT"
+}

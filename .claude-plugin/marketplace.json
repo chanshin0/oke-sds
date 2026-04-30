@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "oke-sds",
-  "description": "Okestro SDS 팀 marketplace (private). sds-workflow + weekly-report plugin 카탈로그",
+  "description": "Okestro SDS 팀 marketplace. sds-workflow + weekly-report + sds-common 플러그인 카탈로그",
   "owner": {
     "name": "Dongchan"
   },
@@ -10,13 +10,19 @@
       "name": "sds-workflow",
       "source": "./plugins/sds-workflow",
       "category": "productivity",
-      "description": "Generic Jira → Claude Code → GitLab MR 워크플로우 (pick/ship/land/recap/where/draft/autopilot/tune/init)"
+      "description": "Generic Jira → Claude Code → GitLab MR 워크플로우 (pick/ship/where/draft/autopilot/tune/init/update)"
     },
     {
       "name": "weekly-report",
       "source": "./plugins/weekly-report",
       "category": "productivity",
       "description": "Confluence 주간보고 자동화 — 신주차 페이지 생성 + Jira 데이터 자동 채움"
+    },
+    {
+      "name": "sds-common",
+      "source": "./plugins/sds-common",
+      "category": "utility",
+      "description": "특정 업무에 묶이지 않는 공유 커맨드 + 스킬 모음 (현재: ai-readiness-cartography)"
     }
   ]
 }
