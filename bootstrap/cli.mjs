@@ -1,5 +1,11 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+  realpathSync,
+} from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 
@@ -123,6 +129,25 @@ function resolveSettingsPath(useGlobal) {
     : resolve(process.cwd(), ".claude", "settings.json");
 }
 
+function canonical(p) {
+  try {
+    return realpathSync(p);
+  } catch {
+    return resolve(p);
+  }
+}
+
+function guardProjectMode(useGlobal) {
+  if (useGlobal) return;
+  if (canonical(process.cwd()) === canonical(homedir())) {
+    fail(
+      `cwd is your home directory (${homedir()}).\n` +
+        `  Project mode would write to ~/.claude/settings.json — same as --global.\n` +
+        `  → cd into a project first, or pass --global if that's what you want.`
+    );
+  }
+}
+
 function main() {
   const args = parseArgs(process.argv);
   if (args.help) {
@@ -131,6 +156,7 @@ function main() {
   }
 
   checkNode();
+  guardProjectMode(args.global);
 
   const settingsPath = resolveSettingsPath(args.global);
   const scopeLabel = args.global ? "user-global" : "project";
