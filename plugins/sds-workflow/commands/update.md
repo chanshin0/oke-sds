@@ -1,5 +1,7 @@
 ---
 description: 플러그인 업데이트 절차 안내 — 3줄 슬래시 커맨드 시퀀스
+entry-mode: readonly
+required-permission: default
 ---
 
 # /sds-workflow:update

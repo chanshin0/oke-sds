@@ -1,6 +1,8 @@
 ---
 description: 신규 Jira 이슈 초안 — 자유 프롬프트 → 5섹션 구조화 + 중복 탐지
 argument-hint: "\"자유 프롬프트\""
+entry-mode: interactive
+required-permission: default
 ---
 
 

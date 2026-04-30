@@ -1,6 +1,8 @@
 ---
 description: 피드백을 sds 워크플로우(커맨드·템플릿·설정)에 구조화해 반영
 argument-hint: "\"자유 형식 피드백\" | --review"
+entry-mode: interactive
+required-permission: accept-edits
 ---
 
 

@@ -1,6 +1,8 @@
 ---
 description: 저장소 부팅 — `.team-workflow/` 스캐폴드 생성 + project_key 등 초기값 기록
 argument-hint: "[--force]"
+entry-mode: interactive
+required-permission: accept-edits
 ---
 
 # /init
@@ -12,6 +14,19 @@ argument-hint: "[--force]"
 인자: `--force` 플래그가 있으면 기존 `.team-workflow/workflow.yml` 도 덮어쓴다.
 
 ---
+
+## Phase 0.5: Entry Switch (권한 모드 분기)
+
+`/init` 은 `.team-workflow/` 가 없는 상태에서 실행되므로 공통 preamble 을 호출하지 않는다. 대신 preamble 의 Phase 0.5 (Entry Switch) **만** 인라인으로 수행한다.
+
+- `${CLAUDE_PLUGIN_ROOT}/workflow/preamble.md` 의 **Phase 0.5** 섹션을 Read.
+- 거기 정의된 절차 (CLI 감지 → 모드 probe → 3-way 분기) 를 본 커맨드의 frontmatter `entry-mode: interactive` 기준으로 적용.
+- 결과:
+  - `auto` (bypass / accept-edits) → 진행
+  - `default` → N회 prompt 안내 후 진행
+  - `plan` → **즉시 중단** (init 은 Edit/Write 가 핵심이라 plan 모드에선 불가)
+
+분기 통과 후 Phase 1 으로.
 
 ## Phase 1: 선행 확인 (순차)
 

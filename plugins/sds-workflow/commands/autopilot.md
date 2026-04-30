@@ -1,6 +1,8 @@
 ---
 description: 자율 운행 — pick → 구현 → ship 원샷 (다중 이슈 시 worktree 병렬)
 argument-hint: "CDS-XXXX [CDS-YYYY ...] | \"자유 설명\" [--stop-at <phase>] [--dry-run]"
+entry-mode: autopilot
+required-permission: bypass
 ---
 
 

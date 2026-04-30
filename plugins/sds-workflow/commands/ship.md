@@ -1,6 +1,8 @@
 ---
 description: 검증(테스트) → 커밋 → 푸시 → MR 등록 → Jira 코멘트 원샷
 argument-hint: "[--skip-ui-check <사유>]"
+entry-mode: interactive
+required-permission: accept-edits
 ---
 
 

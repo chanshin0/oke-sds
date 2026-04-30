@@ -1,6 +1,8 @@
 ---
 description: MR 수동 머지 후 — Jira RESOLVE 전환
 argument-hint: "CDS-XXXX"
+entry-mode: interactive
+required-permission: default
 ---
 
 

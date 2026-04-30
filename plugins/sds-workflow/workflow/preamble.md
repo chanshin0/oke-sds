@@ -1,6 +1,56 @@
 # sds-workflow 공통 Preamble
 
-모든 `sds-*` 커맨드(`init` 제외)는 본문 Phase 실행 **전에** 다음 절차를 1회 수행한다. 이미 같은 세션 내에서 수행했다면 재사용 가능.
+**적용 범위**:
+- **Phase 0.5 (Entry Switch)** — `init` 포함 **모든** `sds-*` 커맨드가 인라인 또는 본 파일 Read 로 수행.
+- **이하 # 절차 (1~6)** — `init` 제외한 모든 커맨드가 본문 Phase 실행 전에 1회 수행. 같은 세션 내 재사용 가능.
+
+## Phase 0.5: Entry Switch (권한 모드 분기)
+
+본 절차 #1 보다 **먼저** 수행. 호출 커맨드 frontmatter 의 `entry-mode` 필드와 현재 CLI/권한 모드 조합으로 진행 여부를 결정한다.
+
+### 0.5.1 — CLI 감지
+
+```bash
+if [ -n "${CLAUDE_PLUGIN_ROOT}" ]; then
+  CLI="claude-code"
+elif [ -n "${CURSOR_TRACE_ID}" ] || [ -n "${CURSOR_AGENT}" ]; then
+  CLI="cursor"
+elif [ -n "${CODEX_HOME}" ] || [ -n "${OPENAI_CODEX}" ]; then
+  CLI="codex"
+else
+  CLI="unknown"
+fi
+```
+
+### 0.5.2 — 모드 추정 (probe)
+
+무해 probe 로 현재 세션 권한 모드를 간접 추정.
+
+```bash
+echo MODE_PROBE_OK
+```
+
+- 즉시 응답, prompt 없이 출력 → `bypass` 또는 `accept-edits` (이하 "auto" 로 통칭)
+- 사용자에게 prompt 발생 (모델이 감지) → `default`
+- Bash 차단 / 거부 응답 → `plan`
+
+### 0.5.3 — 3-way 분기 (커맨드 frontmatter 의 `entry-mode`)
+
+| ↓mode \\ entry→ | `autopilot` | `interactive` | `readonly` |
+|---|---|---|---|
+| **auto** (bypass / accept-edits) | ✅ 진행 | ✅ 진행 | ✅ 진행 |
+| **default** | ❌ 중단 + CLI별 재시작 안내 | ⚠️ N회 prompt 안내 후 진행 | ✅ 진행 |
+| **plan** | ❌ 중단 | ❌ 중단 (시뮬레이션 사고 방지) | ✅ 진행 |
+
+상세 메시지 포맷·CLI별 재시작 안내는 `${CLAUDE_PLUGIN_ROOT}/workflow/permission-modes.md` 참조.
+
+### 0.5.4 — 분기 결과 처리
+
+- **중단 (❌)**: 사용자에게 안내 출력 후 본 preamble 의 #1 이후 절차 수행하지 않음. 즉시 종료.
+- **경고 후 진행 (⚠️)**: 안내 출력 후 #1 부터 정상 진행. 사용자가 `Shift+Tab` 으로 모드 변경했다면 다음 호출부터 안내 미발생.
+- **진행 (✅)**: 안내 없이 #1 로.
+
+---
 
 ## 절차
 

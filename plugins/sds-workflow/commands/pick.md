@@ -1,6 +1,8 @@
 ---
 description: Jira 이슈 가져오기 — 컨텍스트 수집 → 브랜치 생성 → Jira 전환 → 플랜 자동 초안 → 플랜 모드 진입
 argument-hint: "CDS-XXXX"
+entry-mode: interactive
+required-permission: accept-edits
 ---
 
 

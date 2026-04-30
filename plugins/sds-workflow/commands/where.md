@@ -1,6 +1,8 @@
 ---
 description: 현재 상태를 감지해 다음 액션 안내
 argument-hint: "[--force] [--dry-run]"
+entry-mode: readonly
+required-permission: default
 ---
 
 
