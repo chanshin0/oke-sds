@@ -10,7 +10,7 @@
       "name": "sds-workflow",
       "source": "./plugins/sds-workflow",
       "category": "productivity",
-      "description": "Generic Jira → Claude Code → GitLab MR 워크플로우 (pick/ship/where/draft/autopilot/tune/init/update)"
+      "description": "Generic Jira → Claude Code → GitLab MR 워크플로우 (pick/ship/where/draft/autopilot/tune/init/land)"
     },
     {
       "name": "weekly-report",
@@ -22,7 +22,7 @@
       "name": "sds-common",
       "source": "./plugins/sds-common",
       "category": "utility",
-      "description": "특정 업무에 묶이지 않는 공유 커맨드 + 스킬 모음 (현재: ai-readiness-cartography)"
+      "description": "특정 업무에 묶이지 않는 공유 커맨드 + 스킬 모음 (현재: ai-readiness-cartography, presentation_slides)"
     }
   ]
 }

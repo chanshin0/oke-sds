@@ -70,7 +70,6 @@ Generic Jira → Claude Code → GitLab MR 워크플로우 플러그인.
 | `/sds-workflow:draft "자유 프롬프트"` | 신규 Jira 이슈 초안 — 자유 프롬프트 → 5섹션 구조화 + 중복 탐지. authorship footer 자동 첨부 |
 | `/sds-workflow:autopilot PROJ-XXXX [PROJ-YYYY ...] [--stop-at <phase>]` | 자율 운행 — pick → 구현 → ship 원샷. 끝까지 자율 (승인 게이트 없음). 다중 이슈 시 worktree 격리 + subagent 병렬. Phase A-3 / B-2 페이지 코멘트 자동 post |
 | `/sds-workflow:tune "피드백"` | 피드백을 sds 워크플로우에 구조화해 반영 |
-| `/sds-workflow:update` | 플러그인 업데이트 안내 |
 
 `PROJ-XXXX` 는 예시. `.team-workflow/workflow.yml` 의 `jira.project_key` 로 런타임 치환된다.
 

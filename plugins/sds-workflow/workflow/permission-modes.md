@@ -9,7 +9,7 @@
 | entry-mode | 의미 | 적용 커맨드 |
 |---|---|---|
 | `autopilot` | 자율 운행 — 중간 prompt 발생 시 워크플로 깨짐. 무권한 prompt 모드 강제. | `/autopilot` |
-| `interactive` | 사용자 관찰 하 단계별 진행. prompt 발생해도 안전. accept-edits 권장. | `/init`, `/pick`, `/ship`, `/land`, `/draft`, `/tune`, `/update` |
+| `interactive` | 사용자 관찰 하 단계별 진행. prompt 발생해도 안전. accept-edits 권장. | `/init`, `/pick`, `/ship`, `/land`, `/draft`, `/tune` |
 | `readonly` | 상태 조회만. Plan mode 까지 허용. | `/where` |
 
 ---
