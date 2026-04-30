@@ -6,8 +6,9 @@ jira:
   # 필수 — 이 저장소에서 다룰 Jira 프로젝트 키 목록.
   # array 형태. 단일이어도 array (예: ["CDS"]).
   # 비우거나 ["*"] 면 모든 uppercase prefix 허용 (느슨 검증).
+  # 팀 기본: ["CDS", "CEPH"]
   project_keys: {{PROJECT_KEYS_JSON}}
-  # 필수 — Atlassian site URL (예: https://your-team.atlassian.net)
+  # 필수 — Atlassian site URL (팀 기본: https://okestro.atlassian.net)
   base_url: "{{JIRA_BASE_URL}}"
 
 gitlab:
@@ -17,18 +18,8 @@ gitlab:
   base_url: "{{GITLAB_BASE_URL}}"
   project_path: "{{GITLAB_PROJECT_PATH}}"
 
-confluence:
-  # 선택 — weekly-report plugin 사용 시 기본 대상
-  base_url: "{{CONFLUENCE_BASE_URL}}"
-  space_key: "{{CONFLUENCE_SPACE_KEY}}"
-  parent_id: ""
-  # 선택 — weekly-report plugin 사용 시 자동 채움 대상
-  weekly_report:
-    # 주간보고 루트 페이지 ID. 이 아래로 {Y}년 - {상/하}반기 / {M}월 폴더가
-    # 자동 생성되고, 그 안에 신주차 페이지가 들어간다.
-    root_id: ""
-    # 선택 — 첫 실행 시 명시 source 페이지 ID. 비우면 prev_monday 월 폴더에서 자동 선택.
-    template_source_id: ""
+# confluence: 섹션은 weekly-report 플러그인 전용 — `/sds-workflow:weekly-report-init`
+# 가 자체적으로 추가/관리한다. sds-workflow:init 은 이 섹션을 만들지 않는다.
 
 federation:
   # 선택 — Module Federation 등 host 계약면 파일 목록 (저장소별)

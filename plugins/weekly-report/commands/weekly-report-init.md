@@ -19,6 +19,42 @@ argument-hint: ""
 - `git rev-parse --show-toplevel` 성공 여부.
 - `.team-workflow/workflow.yml` 존재 여부. 없으면 중단: "`/sds-workflow:init` 먼저 실행."
 
+## Phase 0.5: Confluence 좌표 수집 (workflow.yml 에 없으면)
+
+`.team-workflow/workflow.yml` 을 읽어 `confluence.base_url` / `confluence.space_key` 존재 여부 확인.
+
+**케이스 A — 둘 다 채워져 있음**: 스킵, 정보성 한 줄 출력:
+> "✓ confluence.base_url=`<existing>`, space_key=`<existing>` (workflow.yml 에서 읽음)"
+
+**케이스 B — `confluence:` 섹션 자체가 없음** (sds-workflow:init 직후 상태): **AskUserQuestion** 으로 묻고, 응답값으로 `confluence:` 블록을 새로 만들어 `workflow.yml` **`federation:` 라인 바로 위에 삽입** (Edit 툴 — `federation:` 을 anchor 로 그 앞에 블록 + 빈 줄 prepend).
+
+**케이스 C — `confluence:` 섹션은 있는데 base_url/space_key 가 빈 값**: 동일하게 묻되 Edit 으로 빈 값 자리만 치환.
+
+질문 (B/C 공통):
+
+**Q. `confluence.base_url`** — Confluence site URL
+- ◉ `https://okestro.atlassian.net/wiki` (팀 기본)
+- Other (직접 입력)
+
+**Q. `confluence.space_key`** — Confluence space key
+- ◉ `PS7` (팀 기본)
+- Other (직접 입력)
+
+삽입 결과 (케이스 B):
+```yaml
+gitlab:
+  ...
+
+confluence:
+  base_url: "<응답값>"
+  space_key: "<응답값>"
+
+federation:
+  ...
+```
+
+멱등성: 두 번째 실행 시 케이스 A 로 분기되어 no-op.
+
 ## Phase 1: Atlassian 이메일 결정
 
 다음 우선순위로 사용자의 Atlassian Cloud 이메일을 결정한다:
@@ -67,12 +103,12 @@ python3 ${CLAUDE_PLUGIN_ROOT}/scripts/weekly_report_lib_check.py --site "<JIRA_B
 
 ## Phase 5: workflow.yml 갱신
 
-`.team-workflow/workflow.yml` 의 `confluence:` 블록 아래 `weekly_report:` 키 추가/갱신:
+Phase 0.5 에서 만든(또는 보존한) `confluence:` 블록 아래 `weekly_report:` 키 추가/갱신:
 
 ```yaml
 confluence:
-  base_url: "..."
-  space_key: "..."
+  base_url: "..."        # Phase 0.5
+  space_key: "..."       # Phase 0.5
   weekly_report:
     root_id: "<ROOT_ID>"
     template_source_id: "<SOURCE_ID>"  # optional
