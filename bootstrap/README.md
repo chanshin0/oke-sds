@@ -5,23 +5,43 @@ One-shot bootstrapper for the [chanshin0/oke-sds](https://github.com/chanshin0/o
 ## Usage
 
 ```bash
+# Project scope (default) — writes to ./.claude/settings.json
 npx oke-sds
+
+# User-global scope — writes to ~/.claude/settings.json
+npx oke-sds --global
+
+npx oke-sds --help
 ```
 
-What it does:
+## Project mode (default)
 
-1. Adds `chanshin0/oke-sds` to your `~/.claude/settings.json` `extraKnownMarketplaces` (idempotent).
-2. Prints next steps to install plugins inside Claude Code.
+Run inside your project. Adds `chanshin0/oke-sds` to `<cwd>/.claude/settings.json`. Commit the file so teammates get marketplace access automatically when they clone.
 
-After running, in Claude Code:
+```bash
+cd my-project
+npx oke-sds
+git add .claude/settings.json
+git commit -m "chore: register oke-sds marketplace"
+```
+
+## Global mode
+
+Apply to every project on the machine.
+
+```bash
+npx oke-sds --global
+```
+
+## Next steps (in Claude Code)
 
 ```
 /plugin install sds-workflow@oke-sds
 /sds-workflow:init
 ```
 
-## Why
+## Behavior
 
-- Skip the `/plugin marketplace add` step in Claude Code.
-- Run once per machine — repo-level setup is handled by `/sds-workflow:init` inside each project.
-- Zero dependencies, runs on Node 18+.
+- Idempotent — safe to run multiple times.
+- Migrates legacy `okestro-sds` key automatically.
+- Zero dependencies. Node 18+.

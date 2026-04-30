@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 const MARKETPLACE_KEY = "oke-sds";
 const MARKETPLACE_REPO = "chanshin0/oke-sds";
 const LEGACY_KEY = "okestro-sds";
 const LEGACY_REPO = "chanshin0/okestro-sds";
-const SETTINGS_PATH = join(homedir(), ".claude", "settings.json");
 
 const c = {
   reset: "\x1b[0m",
@@ -35,18 +34,44 @@ function checkNode() {
   }
 }
 
-function readSettings() {
-  if (!existsSync(SETTINGS_PATH)) return {};
+function parseArgs(argv) {
+  const args = { global: false, help: false };
+  for (const a of argv.slice(2)) {
+    if (a === "--global" || a === "-g") args.global = true;
+    else if (a === "--help" || a === "-h") args.help = true;
+    else fail(`Unknown argument: ${a}`);
+  }
+  return args;
+}
+
+function printHelp() {
+  log(`${c.bold}oke-sds${c.reset} — Claude Code marketplace bootstrapper`);
+  log("");
+  log(`${c.bold}Usage${c.reset}`);
+  log(`  npx oke-sds              ${c.dim}# project scope (./.claude/settings.json)${c.reset}`);
+  log(`  npx oke-sds --global     ${c.dim}# user scope (~/.claude/settings.json)${c.reset}`);
+  log(`  npx oke-sds --help`);
+  log("");
+  log(`${c.bold}Project mode${c.reset} ${c.dim}(default)${c.reset}`);
+  log(`  Writes to <cwd>/.claude/settings.json — commit it to share with team.`);
+  log(`  Future cloners get marketplace access automatically.`);
+  log("");
+  log(`${c.bold}Global mode${c.reset}`);
+  log(`  Writes to ~/.claude/settings.json — applies across all projects on this machine.`);
+}
+
+function readSettings(path) {
+  if (!existsSync(path)) return {};
   try {
-    return JSON.parse(readFileSync(SETTINGS_PATH, "utf8"));
+    return JSON.parse(readFileSync(path, "utf8"));
   } catch (e) {
-    fail(`Failed to parse ${SETTINGS_PATH}: ${e.message}`);
+    fail(`Failed to parse ${path}: ${e.message}`);
   }
 }
 
-function writeSettings(settings) {
-  mkdirSync(dirname(SETTINGS_PATH), { recursive: true });
-  writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2) + "\n");
+function writeSettings(path, settings) {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, JSON.stringify(settings, null, 2) + "\n");
 }
 
 function mergeMarketplace(settings) {
@@ -92,29 +117,48 @@ function mergeMarketplace(settings) {
   };
 }
 
+function resolveSettingsPath(useGlobal) {
+  return useGlobal
+    ? join(homedir(), ".claude", "settings.json")
+    : resolve(process.cwd(), ".claude", "settings.json");
+}
+
 function main() {
+  const args = parseArgs(process.argv);
+  if (args.help) {
+    printHelp();
+    return;
+  }
+
   checkNode();
 
-  log(`${c.bold}oke-sds bootstrapper${c.reset}`);
-  log(`${c.dim}Registering marketplace: ${MARKETPLACE_REPO}${c.reset}\n`);
+  const settingsPath = resolveSettingsPath(args.global);
+  const scopeLabel = args.global ? "user-global" : "project";
 
-  const current = readSettings();
+  log(`${c.bold}oke-sds bootstrapper${c.reset} ${c.dim}(${scopeLabel} scope)${c.reset}`);
+  log(`${c.dim}Target: ${settingsPath}${c.reset}\n`);
+
+  const current = readSettings(settingsPath);
   const { settings, added, removedLegacy } = mergeMarketplace(current);
 
   if (added || removedLegacy) {
-    writeSettings(settings);
+    writeSettings(settingsPath, settings);
     if (removedLegacy) {
       log(`${c.green}✓${c.reset} Removed legacy "${LEGACY_KEY}" → ${LEGACY_REPO}`);
     }
     if (added) {
       log(`${c.green}✓${c.reset} Registered "${MARKETPLACE_KEY}" → ${MARKETPLACE_REPO}`);
     }
-    log(`${c.dim}  ${SETTINGS_PATH}${c.reset}`);
   } else {
     log(`${c.yellow}•${c.reset} "${MARKETPLACE_KEY}" already registered — skipping`);
   }
 
   log("");
+  if (!args.global) {
+    log(`${c.bold}Tip${c.reset} ${c.dim}— commit .claude/settings.json so teammates get marketplace access automatically:${c.reset}`);
+    log(`  ${c.cyan}git add .claude/settings.json && git commit -m "chore: register oke-sds marketplace"${c.reset}`);
+    log("");
+  }
   log(`${c.bold}Next steps${c.reset} ${c.dim}(in Claude Code, inside your project)${c.reset}`);
   log(`  ${c.cyan}1.${c.reset} /plugin install sds-workflow@oke-sds`);
   log(`  ${c.cyan}2.${c.reset} /sds-workflow:init`);
