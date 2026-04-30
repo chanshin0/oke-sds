@@ -104,7 +104,7 @@ def main() -> int:
     new_body = update_header_dates(new_body, new_title)
     new_body = append_footer(
         new_body,
-        source="/sds-workflow:weekly-report-create",
+        source="/weekly-report:create",
         generator="Claude (interactive)",
         version=PLUGIN_VERSION,
         generated_at_kst=_now_kst(),

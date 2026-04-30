@@ -7,7 +7,7 @@ argument-hint: "[<page-id>] [--apply]"
 
 > 본문 실행 전 `${CLAUDE_PLUGIN_ROOT}/workflow/preamble.md` 를 Read 하여 공통 설정 로드.
 
-# /sds-workflow:weekly-report-update-all
+# /weekly-report:update-all
 
 **은유**: 항공기 전체 좌석을 **승무원이 일괄 점검**.
 
@@ -23,12 +23,12 @@ argument-hint: "[<page-id>] [--apply]"
 
 ## Phase 0: 사전 점검 + 필수 설정 검증
 
-- 토큰·이메일 + `confluence.weekly_report.root_id` + `WEEKLY_REPORT_GROUP_LABEL` env — `weekly-report-update-mine` Phase 0 와 동일. 누락 시 동일 형식 friendly fail 메시지 + 중단.
+- 토큰·이메일 + `confluence.weekly_report.root_id` + `WEEKLY_REPORT_GROUP_LABEL` env — `/weekly-report:update-mine` Phase 0 와 동일. 누락 시 동일 형식 friendly fail 메시지 + 중단.
 - 권한 경고 — 첫 1회는 사용자에게 "다른 담당자 이슈에도 접근 권한이 있는지" 확인.
 
 ## Phase 1: 대상 페이지 결정
 
-`weekly-report-update-mine` Phase 1 과 동일.
+`/weekly-report:update-mine` Phase 1 과 동일.
 
 ## Phase 2: dry-run
 

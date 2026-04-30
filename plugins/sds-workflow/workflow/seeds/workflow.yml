@@ -18,7 +18,7 @@ gitlab:
   base_url: "{{GITLAB_BASE_URL}}"
   project_path: "{{GITLAB_PROJECT_PATH}}"
 
-# confluence: 섹션은 weekly-report 플러그인 전용 — `/sds-workflow:weekly-report-init`
+# confluence: 섹션은 weekly-report 플러그인 전용 — `/weekly-report:init`
 # 가 자체적으로 추가/관리한다. sds-workflow:init 은 이 섹션을 만들지 않는다.
 
 federation:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Quick Atlassian credential check — used by /weekly-report-init Phase 3."""
+"""Quick Atlassian credential check — used by /weekly-report:init Phase 3."""
 from __future__ import annotations
 import argparse
 import os

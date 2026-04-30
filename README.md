@@ -18,7 +18,7 @@ Claude Code 안에서:
 /plugin install weekly-report@oke-sds
 /reload-plugins
 /sds-workflow:init
-/sds-workflow:weekly-report-init
+/weekly-report:init
 ```
 
 ---

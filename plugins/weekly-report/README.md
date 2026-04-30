@@ -52,10 +52,10 @@ weekly-report/
 ├── .claude-plugin/plugin.json
 ├── README.md
 ├── commands/
-│   ├── weekly-report-init.md
-│   ├── weekly-report-create.md
-│   ├── weekly-report-update-mine.md
-│   └── weekly-report-update-all.md
+│   ├── init.md
+│   ├── create.md
+│   ├── update-mine.md
+│   └── update-all.md
 └── scripts/
     ├── weekly_report_create.py
     ├── weekly_report_update_mine.py

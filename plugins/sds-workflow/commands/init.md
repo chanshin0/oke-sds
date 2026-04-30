@@ -67,7 +67,7 @@ Parse 규칙 (모두 `<base_url>` + `<project_path>` 두 변수로 분해):
 
 총 4문항. 각 질문은 **AskUserQuestion 다지선다 + Other(직접 입력)** 형태로 띄운다. 첫 옵션이 default(◉) 로 선택되어 있어 Enter 만 치면 통과.
 
-> 참고: Confluence 관련 값(`confluence.base_url`, `confluence.space_key`) 은 `weekly-report` 플러그인 전용이라 여기서 안 묻는다. `/sds-workflow:weekly-report-init` 가 자체적으로 수집한다.
+> 참고: Confluence 관련 값(`confluence.base_url`, `confluence.space_key`) 은 `weekly-report` 플러그인 전용이라 여기서 안 묻는다. `/weekly-report:init` 가 자체적으로 수집한다.
 
 자동 감지 성공 시 정보성 한 줄 출력 (Q3/Q4 위):
 > "✓ origin 에서 감지: base=`${DEFAULT_GITLAB_BASE_URL}`, path=`${DEFAULT_GITLAB_PROJECT_PATH}` (Q3/Q4 첫 옵션으로 추가)"

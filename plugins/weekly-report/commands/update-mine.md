@@ -7,7 +7,7 @@ argument-hint: "[<page-id>] [--apply]"
 
 > 본문 실행 전 `${CLAUDE_PLUGIN_ROOT}/workflow/preamble.md` 를 Read 하여 공통 설정 로드. 변수 `JIRA_BASE_URL`, `confluence.weekly_report.root_id` 추출.
 
-# /sds-workflow:weekly-report-update-mine
+# /weekly-report:update-mine
 
 **은유**: 자기 좌석 보고서만 **본인이 적어 넣기**.
 
@@ -23,8 +23,8 @@ argument-hint: "[<page-id>] [--apply]"
 
 - `python3 --version` 성공.
 - **`confluence.weekly_report.root_id` 검증**: 미설정/빈 값이면 즉시 중단:
-  > "`confluence.weekly_report.root_id` 미설정. `/sds-workflow:weekly-report-init` 또는 `.team-workflow/workflow.yml` 직접 편집으로 채운 뒤 재실행."
-- `security find-generic-password -a "<EMAIL>" -s atlassian-api-token -w` 로 토큰 존재 확인. 없으면 중단: "`/sds-workflow:weekly-report-init` 의 Phase 2 절차로 토큰 keychain 등록 필요."
+  > "`confluence.weekly_report.root_id` 미설정. `/weekly-report:init` 또는 `.team-workflow/workflow.yml` 직접 편집으로 채운 뒤 재실행."
+- `security find-generic-password -a "<EMAIL>" -s atlassian-api-token -w` 로 토큰 존재 확인. 없으면 중단: "`/weekly-report:init` 의 Phase 2 절차로 토큰 keychain 등록 필요."
   - `<EMAIL>` = `git config sds.atlassian.email` 우선, 없으면 `git config user.email`.
 - **`WEEKLY_REPORT_GROUP_LABEL` env var 확인** (선택): 미설정 시 "TEAM" 기본 사용. stderr 로 1회 알림: "WEEKLY_REPORT_GROUP_LABEL 미설정 → 기본 'TEAM' 사용. 너의 팀 그룹 라벨이 다르면 export 필요."
 

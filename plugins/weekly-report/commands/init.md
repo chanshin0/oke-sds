@@ -3,11 +3,11 @@ description: 주간보고 자동화 초기 설정 — Atlassian API 토큰 keych
 argument-hint: ""
 ---
 
-# /sds-workflow:weekly-report-init
+# /weekly-report:init
 
 **은유**: 비행 전 **연료 주입과 항법 좌표 입력**.
 
-**목적**: `weekly-report-*` 커맨드를 처음 쓰기 전에 1회 실행. 사용자별 Atlassian API 토큰을 macOS keychain 에 안전 저장하고, 저장소 `workflow.yml` 에 주간보고 페이지 부모/템플릿 ID 를 기록한다.
+**목적**: `/weekly-report:*` 커맨드를 처음 쓰기 전에 1회 실행. 사용자별 Atlassian API 토큰을 macOS keychain 에 안전 저장하고, 저장소 `workflow.yml` 에 주간보고 페이지 부모/템플릿 ID 를 기록한다.
 
 이 커맨드는 토큰 값을 메시지에 노출하지 않도록 사용자가 **별도 터미널**에서 직접 keychain 등록 명령을 실행하게 안내한다.
 
@@ -99,7 +99,7 @@ python3 ${CLAUDE_PLUGIN_ROOT}/scripts/weekly_report_lib_check.py --site "<JIRA_B
 | 키 | 질문 | 비고 |
 |---|---|---|
 | `weekly_report.root_id` | 주간보고 페이지들이 속한 **부모 페이지 ID** | 부모 페이지 URL 의 마지막 숫자. 예: `2950693214` |
-| `weekly_report.template_source_id` | 신규 주차 페이지 생성 시 **참고할 가장 최근 주차 페이지 ID** | 비우면 `weekly-report-create` 가 매번 묻거나 부모 자식 중 최신 자동 선택 (v2) |
+| `weekly_report.template_source_id` | 신규 주차 페이지 생성 시 **참고할 가장 최근 주차 페이지 ID** | 비우면 `/weekly-report:create` 가 매번 묻거나 부모 자식 중 최신 자동 선택 (v2) |
 
 ## Phase 5: workflow.yml 갱신
 
@@ -119,6 +119,6 @@ confluence:
 ## Phase 6: 완료 보고
 
 성공 메시지에 다음 안내 포함:
-- 본인 행만 갱신: `/sds-workflow:weekly-report-update-mine`
-- 다음 주차 페이지 생성: `/sds-workflow:weekly-report-create`
-- (관리자 권한자만) 전체 갱신: `/sds-workflow:weekly-report-update-all`
+- 본인 행만 갱신: `/weekly-report:update-mine`
+- 다음 주차 페이지 생성: `/weekly-report:create`
+- (관리자 권한자만) 전체 갱신: `/weekly-report:update-all`
