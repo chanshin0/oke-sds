@@ -220,7 +220,7 @@ Phase 4: 보고 (Handoff)
 
 ### `/land CDS-XXXX`
 
-**목적**: 머지 후 Jira RESOLVE 전환 + 로컬 정리.
+**목적**: 머지 후 Jira RESOLVE 전환. 로컬 브랜치·체크아웃은 건드리지 않음 (작업 내역 보존).
 
 ```
 Phase 1: MR 상태 확인 (순차)

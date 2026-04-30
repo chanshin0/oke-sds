@@ -65,7 +65,7 @@ Generic Jira → Claude Code → GitLab MR 워크플로우 플러그인.
 | `/sds-workflow:init` | 저장소 부팅 — `.team-workflow/` 스캐폴드 생성 + remote-sds 등록 |
 | `/sds-workflow:pick PROJ-XXXX` | Jira 이슈 가져오기 — 컨텍스트 수집 → 브랜치 생성 → Jira 전환 → 플랜 자동 초안 → 플랜 모드 진입 |
 | `/sds-workflow:ship` | 검증(테스트) → 커밋 → 푸시 → MR 등록 → Jira 코멘트 원샷 |
-| `/sds-workflow:land PROJ-XXXX` | MR 수동 머지 후 — Jira RESOLVE 전환 + 로컬 정리 |
+| `/sds-workflow:land PROJ-XXXX` | MR 수동 머지 후 — Jira RESOLVE 전환만 (로컬 브랜치는 보존) |
 | `/sds-workflow:where` | 현재 상태를 감지해 다음 액션 안내 |
 | `/sds-workflow:draft "자유 프롬프트"` | 신규 Jira 이슈 초안 — 자유 프롬프트 → 5섹션 구조화 + 중복 탐지. authorship footer 자동 첨부 |
 | `/sds-workflow:autopilot PROJ-XXXX [PROJ-YYYY ...] [--stop-at <phase>]` | 자율 운행 — pick → 구현 → ship 원샷. 끝까지 자율 (승인 게이트 없음). 다중 이슈 시 worktree 격리 + subagent 병렬. Phase A-3 / B-2 페이지 코멘트 자동 post |

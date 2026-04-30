@@ -73,4 +73,4 @@ argument-hint: "CDS-XXXX"
 - **파괴적 작업 금지**: `git branch -D`, `git reset --hard`, force push 등.
 - **로컬 작업 내역 보존**: 머지된 브랜치를 자동 삭제하지 않는다. 재참조·cherry-pick·히스토리 추적 여지를 남긴다. 사용자가 원할 때 수동으로 정리.
 - MR 미머지 상태에서는 RESOLVE 전환 금지.
-- **착륙만 담당** — 머지 후 Jira RESOLVE 전환 + 로컬 정리.
+- **착륙만 담당** — 머지 후 Jira RESOLVE 전환만. 로컬 브랜치·체크아웃은 건드리지 않음 (정리는 사용자 수동).
