@@ -189,7 +189,8 @@ function main() {
   }
   log(`${c.bold}Next steps${c.reset} ${c.dim}(in Claude Code, inside your project)${c.reset}`);
   log(`  ${c.cyan}1.${c.reset} /plugin install sds-workflow@oke-sds`);
-  log(`  ${c.cyan}2.${c.reset} /sds-workflow:init`);
+  log(`  ${c.cyan}2.${c.reset} /reload-plugins`);
+  log(`  ${c.cyan}3.${c.reset} /sds-workflow:init`);
   log("");
   log(`${c.dim}Optional: /plugin install weekly-report@oke-sds${c.reset}`);
 }
