@@ -1,0 +1,35 @@
+{
+  "name": "oke-sds",
+  "version": "0.1.0",
+  "description": "One-shot bootstrapper for the chanshin0/oke-sds Claude Code marketplace.",
+  "type": "module",
+  "bin": {
+    "oke-sds": "./cli.mjs"
+  },
+  "files": [
+    "cli.mjs",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chanshin0/oke-sds.git",
+    "directory": "bootstrap"
+  },
+  "homepage": "https://github.com/chanshin0/oke-sds#readme",
+  "bugs": {
+    "url": "https://github.com/chanshin0/oke-sds/issues"
+  },
+  "keywords": [
+    "claude-code",
+    "claude",
+    "marketplace",
+    "plugin",
+    "bootstrap",
+    "sds-workflow"
+  ],
+  "license": "MIT",
+  "author": "chanshin0"
+}
