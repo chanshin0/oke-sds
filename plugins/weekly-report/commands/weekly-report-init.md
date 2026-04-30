@@ -62,7 +62,7 @@ python3 ${CLAUDE_PLUGIN_ROOT}/scripts/weekly_report_lib_check.py --site "<JIRA_B
 
 | 키 | 질문 | 비고 |
 |---|---|---|
-| `weekly_report.parent_id` | 주간보고 페이지들이 속한 **부모 페이지 ID** | 부모 페이지 URL 의 마지막 숫자. 예: `2950693214` |
+| `weekly_report.root_id` | 주간보고 페이지들이 속한 **부모 페이지 ID** | 부모 페이지 URL 의 마지막 숫자. 예: `2950693214` |
 | `weekly_report.template_source_id` | 신규 주차 페이지 생성 시 **참고할 가장 최근 주차 페이지 ID** | 비우면 `weekly-report-create` 가 매번 묻거나 부모 자식 중 최신 자동 선택 (v2) |
 
 ## Phase 5: workflow.yml 갱신
@@ -74,7 +74,7 @@ confluence:
   base_url: "..."
   space_key: "..."
   weekly_report:
-    parent_id: "<PARENT_ID>"
+    root_id: "<ROOT_ID>"
     template_source_id: "<SOURCE_ID>"  # optional
 ```
 

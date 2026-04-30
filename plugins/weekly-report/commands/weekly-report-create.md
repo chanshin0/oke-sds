@@ -22,15 +22,23 @@ argument-hint: "[--source-id <ID>] [--apply]"
 
 ---
 
-## Phase 0: 사전 점검
+## Phase 0: 사전 점검 + 필수 설정 검증
 
 - 토큰·이메일 — 동일.
+- **`.team-workflow/workflow.yml` 의 `confluence.weekly_report.root_id` 검증**:
+  - 미설정 또는 빈 값이면 즉시 중단 + 안내:
+    > "`confluence.weekly_report.root_id` 가 설정되지 않았습니다. 다음 중 하나로 설정 후 재실행:
+    > - `/sds-workflow:weekly-report-init` 호출 (대화형 안내)
+    > - `.team-workflow/workflow.yml` 의 `confluence.weekly_report.root_id` 에 직접 입력 (Confluence 주간보고 루트 페이지 ID)"
+- **Atlassian API 토큰 keychain 등록 확인**:
+  - `security find-generic-password -s atlassian-api-token -a "<EMAIL>" -w` 호출
+  - 실패 시 중단 + 안내: "`/sds-workflow:weekly-report-init` 의 Phase 2 절차로 토큰 keychain 등록 필요."
 
 ## Phase 1: 소스 페이지 결정
 
 1. `--source-id` 있으면 그것 사용.
 2. 없고 `template_source_id` 있으면 그것.
-3. 둘 다 없으면 `parent_id` 의 자식 중 제목 날짜 기준 최신 페이지 자동 선택.
+3. 둘 다 없으면 `root_id` 의 자식 중 제목 날짜 기준 최신 페이지 자동 선택.
 
 ## Phase 2: dry-run
 

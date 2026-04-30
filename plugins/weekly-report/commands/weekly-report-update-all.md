@@ -21,9 +21,9 @@ argument-hint: "[<page-id>] [--apply]"
 
 ---
 
-## Phase 0: 사전 점검
+## Phase 0: 사전 점검 + 필수 설정 검증
 
-- 토큰·이메일 — `weekly-report-update-mine` Phase 0 와 동일.
+- 토큰·이메일 + `confluence.weekly_report.root_id` + `WEEKLY_REPORT_GROUP_LABEL` env — `weekly-report-update-mine` Phase 0 와 동일. 누락 시 동일 형식 friendly fail 메시지 + 중단.
 - 권한 경고 — 첫 1회는 사용자에게 "다른 담당자 이슈에도 접근 권한이 있는지" 확인.
 
 ## Phase 1: 대상 페이지 결정
