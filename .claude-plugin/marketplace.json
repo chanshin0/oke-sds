@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "okestro-sds",
+  "name": "oke-sds",
   "description": "Okestro SDS 팀 marketplace (private). sds-workflow + weekly-report plugin 카탈로그",
   "owner": {
     "name": "Dongchan"
