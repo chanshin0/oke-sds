@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>팀 배포 흐름</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0f1a; font-family: 'Noto Sans KR', sans-serif; color: #e6edf3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding-bottom: 50px; }
+.container { width: 1280px; padding: 44px 80px; display: flex; flex-direction: column; align-items: center; }
+.title { font-size: 44px; font-weight: 900; background: linear-gradient(135deg, #7c3aed, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin-bottom: 16px; line-height: 1.3; }
+.subtitle { font-size: 16px; color: #8b949e; margin-bottom: 32px; text-align: center; }
+.steps { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 1000px; }
+.step { display: flex; align-items: flex-start; gap: 20px; background: rgba(139, 148, 158, 0.04); border: 1px solid rgba(139, 148, 158, 0.1); border-radius: 16px; padding: 18px 24px; }
+.step-num { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #38bdf8); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; flex-shrink: 0; }
+.step-content { flex: 1; }
+.step-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.step-desc { font-size: 13px; color: #8b949e; line-height: 1.7; font-family: 'Courier New', monospace; }
+.step-note { font-size: 12px; color: #6e7681; margin-top: 4px; font-family: 'Noto Sans KR', sans-serif; }
+.slide-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 50px; background: rgba(10, 15, 26, 0.95); backdrop-filter: blur(12px); border-top: 1px solid rgba(124, 58, 237, 0.2); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.slide-nav-inner { width: 1280px; display: flex; align-items: center; justify-content: space-between; padding: 0 60px; }
+.slide-nav a { text-decoration: none; font-size: 14px; font-weight: 700; color: #7c3aed; }
+.slide-nav .nav-center a { color: #8b949e; font-size: 13px; font-weight: 400; }
+body { opacity: 0; animation: fadeIn 0.4s ease forwards; }
+body.fade-out { animation: fadeOut 0.3s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 class="title">팀 배포 — 4 단계</h1>
+  <p class="subtitle">팀원이 클릭 몇 번으로 install 끝나는 흐름</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">팀 저장소 .claude/settings.json 에 marketplace 사전 등록</div>
+        <div class="step-desc">"extraKnownMarketplaces": { "oke-sds": { "source": { "github", "chanshin0/oke-sds" }, "autoUpdate": true } }</div>
+        <div class="step-note">"enabledPlugins" 까지 미리 채워두면 더 매끄러움</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">팀원이 dev 풀 + Claude Code 시작</div>
+        <div class="step-desc">git pull → claude</div>
+        <div class="step-note">Claude Code 가 settings.json 의 extraKnownMarketplaces 자동 감지</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">트러스트 + install 프롬프트 체인</div>
+        <div class="step-desc">Trust this folder? → Yes  →  Install marketplace? → Yes  →  Install plugin? → Yes</div>
+        <div class="step-note">public marketplace 라 인증 불필요. private 면 GITHUB_TOKEN 필요</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">반영 + 이후 자동 갱신</div>
+        <div class="step-desc">/reload-plugins</div>
+        <div class="step-note">marketplace 의 auto-update 토글 ON 해두면 이후 시작할 때마다 최신 자동 반영. version 필드 없음 → 매 commit = 새 version 으로 인식</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="slide-nav">
+  <div class="slide-nav-inner">
+    <div class="nav-left"><a href="08-build-decisions.html" onclick="event.preventDefault(); navigateTo(this.href)">&larr; 이전</a></div>
+    <div class="nav-center"><a href="index.html">09 / 10</a></div>
+    <div class="nav-right"><a href="10-summary.html" onclick="event.preventDefault(); navigateTo(this.href)">다음 &rarr;</a></div>
+  </div>
+</nav>
+<script>
+function navigateTo(url) { document.body.classList.add('fade-out'); setTimeout(function() { window.location.href = url; }, 300); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') navigateTo('08-build-decisions.html');
+  if (e.key === 'ArrowRight') navigateTo('10-summary.html');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>oke-sds 의 구조</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0f1a; font-family: 'Noto Sans KR', sans-serif; color: #e6edf3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding-bottom: 50px; }
+.container { width: 1280px; padding: 44px 80px; display: flex; flex-direction: column; align-items: center; }
+.title { font-size: 44px; font-weight: 900; background: linear-gradient(135deg, #7c3aed, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin-bottom: 16px; line-height: 1.3; }
+.subtitle { font-size: 16px; color: #8b949e; margin-bottom: 36px; text-align: center; }
+.diagram { width: 100%; max-width: 1100px; background: rgba(22, 27, 40, 0.6); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 20px; padding: 36px; text-align: center; margin-bottom: 24px; }
+.diagram-center { display: inline-block; padding: 16px 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(56, 189, 248, 0.1)); border: 2px solid #7c3aed; font-size: 22px; font-weight: 900; margin-bottom: 20px; }
+.diagram-center small { display: block; font-size: 13px; color: #8b949e; margin-top: 4px; font-weight: 500; }
+.diagram-arrows { font-size: 24px; color: #7c3aed; margin: 12px 0; }
+.diagram-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+.diagram-node { background: rgba(139, 148, 158, 0.06); border: 1px solid rgba(139, 148, 158, 0.15); border-radius: 12px; padding: 18px 24px; min-width: 280px; }
+.diagram-node-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #a78bfa; }
+.diagram-node-desc { font-size: 13px; color: #8b949e; line-height: 1.6; }
+.diagram-node-desc code { background: rgba(124, 58, 237, 0.15); color: #a78bfa; padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: 'Courier New', monospace; }
+.code-block { font-family: 'Courier New', monospace; background: rgba(10, 15, 26, 0.8); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 8px; padding: 14px 20px; font-size: 12px; color: #c9d1d9; line-height: 1.6; max-width: 1000px; text-align: left; white-space: pre; }
+.slide-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 50px; background: rgba(10, 15, 26, 0.95); backdrop-filter: blur(12px); border-top: 1px solid rgba(124, 58, 237, 0.2); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.slide-nav-inner { width: 1280px; display: flex; align-items: center; justify-content: space-between; padding: 0 60px; }
+.slide-nav a { text-decoration: none; font-size: 14px; font-weight: 700; color: #7c3aed; }
+.slide-nav .nav-center a { color: #8b949e; font-size: 13px; font-weight: 400; }
+body { opacity: 0; animation: fadeIn 0.4s ease forwards; }
+body.fade-out { animation: fadeOut 0.3s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 class="title">oke-sds 의 구조</h1>
+  <p class="subtitle">1 marketplace + 2 plugins, 같은 GitHub repo 안에 동거</p>
+  <div class="diagram">
+    <div class="diagram-center">chanshin0/oke-sds<small>public marketplace repo</small></div>
+    <div class="diagram-arrows">↓</div>
+    <div class="diagram-row">
+      <div class="diagram-node">
+        <div class="diagram-node-title">📋 .claude-plugin/marketplace.json</div>
+        <div class="diagram-node-desc">카탈로그 — 2 plugin 등록<br><code>oke-sds</code> 라는 이름의 marketplace 정의</div>
+      </div>
+      <div class="diagram-node">
+        <div class="diagram-node-title">📦 plugins/sds-workflow/</div>
+        <div class="diagram-node-desc">9 슬래시 커맨드<br>Jira → Claude Code → GitLab MR 워크플로우</div>
+      </div>
+      <div class="diagram-node">
+        <div class="diagram-node-title">📦 plugins/weekly-report/</div>
+        <div class="diagram-node-desc">4 슬래시 커맨드 + Python lib<br>Confluence 주간보고 자동화</div>
+      </div>
+    </div>
+  </div>
+  <div class="code-block">marketplace.json:
+{
+  "name": "oke-sds",
+  "plugins": [
+    { "name": "sds-workflow",   "source": "./plugins/sds-workflow"   },
+    { "name": "weekly-report",  "source": "./plugins/weekly-report"  }
+  ]
+}</div>
+</div>
+
+<nav class="slide-nav">
+  <div class="slide-nav-inner">
+    <div class="nav-left"><a href="05-relations.html" onclick="event.preventDefault(); navigateTo(this.href)">&larr; 이전</a></div>
+    <div class="nav-center"><a href="index.html">06 / 10</a></div>
+    <div class="nav-right"><a href="07-sds-workflow-commands.html" onclick="event.preventDefault(); navigateTo(this.href)">다음 &rarr;</a></div>
+  </div>
+</nav>
+<script>
+function navigateTo(url) { document.body.classList.add('fade-out'); setTimeout(function() { window.location.href = url; }, 300); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') navigateTo('05-relations.html');
+  if (e.key === 'ArrowRight') navigateTo('07-sds-workflow-commands.html');
+});
+</script>
+</body>
+</html>

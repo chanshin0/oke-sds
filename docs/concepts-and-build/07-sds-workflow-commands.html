@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>sds-workflow 의 9 슬래시 커맨드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0f1a; font-family: 'Noto Sans KR', sans-serif; color: #e6edf3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding-bottom: 50px; }
+.container { width: 1280px; padding: 44px 80px; display: flex; flex-direction: column; align-items: center; }
+.title { font-size: 44px; font-weight: 900; background: linear-gradient(135deg, #7c3aed, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin-bottom: 16px; line-height: 1.3; }
+.subtitle { font-size: 16px; color: #8b949e; margin-bottom: 32px; text-align: center; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; max-width: 1100px; }
+.cmd-card { background: rgba(139, 148, 158, 0.04); border: 1px solid rgba(139, 148, 158, 0.1); border-radius: 12px; padding: 16px 18px; transition: all 0.25s ease; }
+.cmd-card:hover { transform: translateY(-2px); border-color: rgba(124, 58, 237, 0.4); }
+.cmd-name { font-size: 15px; font-weight: 700; color: #a78bfa; margin-bottom: 4px; font-family: 'Courier New', monospace; }
+.cmd-desc { font-size: 12px; color: #8b949e; line-height: 1.5; }
+.note { margin-top: 24px; max-width: 1000px; padding: 14px 24px; background: rgba(22, 27, 40, 0.6); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 12px; font-size: 13px; color: #8b949e; line-height: 1.7; text-align: center; }
+.slide-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 50px; background: rgba(10, 15, 26, 0.95); backdrop-filter: blur(12px); border-top: 1px solid rgba(124, 58, 237, 0.2); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.slide-nav-inner { width: 1280px; display: flex; align-items: center; justify-content: space-between; padding: 0 60px; }
+.slide-nav a { text-decoration: none; font-size: 14px; font-weight: 700; color: #7c3aed; }
+.slide-nav .nav-center a { color: #8b949e; font-size: 13px; font-weight: 400; }
+body { opacity: 0; animation: fadeIn 0.4s ease forwards; }
+body.fade-out { animation: fadeOut 0.3s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 class="title">sds-workflow 9 커맨드</h1>
+  <p class="subtitle">집기 → 출하 → 착륙 + 부수 도구</p>
+  <div class="grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/init</div>
+      <div class="cmd-desc">저장소 부팅 — .team-workflow/ 스캐폴드 + remote 등록</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/pick PROJ-XXXX</div>
+      <div class="cmd-desc">Jira 이슈 가져오기 — 컨텍스트·브랜치·플랜 자동</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/ship</div>
+      <div class="cmd-desc">검증 → 커밋 → 푸시 → MR 등록 → Jira 코멘트</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/land PROJ-XXXX</div>
+      <div class="cmd-desc">머지 후 Jira RESOLVE 전환 (브랜치 보존)</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/where</div>
+      <div class="cmd-desc">현재 상태 감지 → 다음 액션 안내</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/draft "설명"</div>
+      <div class="cmd-desc">신규 Jira 이슈 초안 — 5섹션 구조화 + 중복 탐지</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/autopilot PROJ-XXXX</div>
+      <div class="cmd-desc">자율 운행 — pick → 구현 → ship 원샷. 다중 issue 시 worktree 병렬</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/tune "피드백"</div>
+      <div class="cmd-desc">피드백을 워크플로우에 구조화해 반영</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/update</div>
+      <div class="cmd-desc">플러그인 업데이트 안내</div>
+    </div>
+  </div>
+  <div class="note">
+    민감정보 (Jira 키, GitLab URL 등) 는 plugin 코드가 아니라 consumer repo 의 <code>.team-workflow/workflow.yml</code> 에 보관 → plugin 자체는 어디서나 사용 가능.
+  </div>
+</div>
+
+<nav class="slide-nav">
+  <div class="slide-nav-inner">
+    <div class="nav-left"><a href="06-oke-sds-structure.html" onclick="event.preventDefault(); navigateTo(this.href)">&larr; 이전</a></div>
+    <div class="nav-center"><a href="index.html">07 / 10</a></div>
+    <div class="nav-right"><a href="08-build-decisions.html" onclick="event.preventDefault(); navigateTo(this.href)">다음 &rarr;</a></div>
+  </div>
+</nav>
+<script>
+function navigateTo(url) { document.body.classList.add('fade-out'); setTimeout(function() { window.location.href = url; }, 300); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') navigateTo('06-oke-sds-structure.html');
+  if (e.key === 'ArrowRight') navigateTo('08-build-decisions.html');
+});
+</script>
+</body>
+</html>

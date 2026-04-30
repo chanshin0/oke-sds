@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>빌드 의사결정</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0f1a; font-family: 'Noto Sans KR', sans-serif; color: #e6edf3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding-bottom: 50px; }
+.container { width: 1280px; padding: 44px 80px; display: flex; flex-direction: column; align-items: center; }
+.title { font-size: 44px; font-weight: 900; background: linear-gradient(135deg, #7c3aed, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin-bottom: 16px; line-height: 1.3; }
+.subtitle { font-size: 16px; color: #8b949e; margin-bottom: 32px; text-align: center; }
+.steps { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 1100px; }
+.step { display: flex; align-items: flex-start; gap: 20px; background: rgba(139, 148, 158, 0.04); border: 1px solid rgba(139, 148, 158, 0.1); border-radius: 16px; padding: 20px 24px; opacity: 0; transform: translateX(-20px); animation: stepIn 0.5s ease-out forwards; }
+.step:nth-child(1) { animation-delay: 0.15s; }
+.step:nth-child(2) { animation-delay: 0.3s; }
+.step:nth-child(3) { animation-delay: 0.45s; }
+.step:nth-child(4) { animation-delay: 0.6s; }
+@keyframes stepIn { to { opacity: 1; transform: translateX(0); } }
+.step-num { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #38bdf8); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; flex-shrink: 0; }
+.step-content { flex: 1; }
+.step-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.step-desc { font-size: 13px; color: #8b949e; line-height: 1.7; }
+.step-desc code { background: rgba(124, 58, 237, 0.15); color: #a78bfa; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+.slide-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 50px; background: rgba(10, 15, 26, 0.95); backdrop-filter: blur(12px); border-top: 1px solid rgba(124, 58, 237, 0.2); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.slide-nav-inner { width: 1280px; display: flex; align-items: center; justify-content: space-between; padding: 0 60px; }
+.slide-nav a { text-decoration: none; font-size: 14px; font-weight: 700; color: #7c3aed; }
+.slide-nav .nav-center a { color: #8b949e; font-size: 13px; font-weight: 400; }
+body { opacity: 0; animation: fadeIn 0.4s ease forwards; }
+body.fade-out { animation: fadeOut 0.3s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 class="title">빌드 의사결정 4가지</h1>
+  <p class="subtitle">"어디서 어떻게 패키징 할까" 의 결정 과정</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Marketplace + Plugin 같은 repo 통합 (분리 X)</div>
+        <div class="step-desc">단일 plugin 1-2개라면 marketplace.json 과 plugins/ 가 같은 repo 동거가 단순. 분리는 plugin 여러 개 큐레이션할 때만 가치 발생.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">민감정보는 consumer repo 의 .team-workflow/ 에</div>
+        <div class="step-desc">Jira project key, GitLab URL 같은 환경 의존 값은 plugin 안에 박지 않음. <code>.team-workflow/workflow.yml</code> 가 deep-merge 대상. plugin 은 placeholder 만 갖고 generic 유지.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">2개 plugin 으로 분리 — sds-workflow + weekly-report</div>
+        <div class="step-desc">기능 성격이 다름 (개발 워크플로우 vs 보고 자동화) + 의존 도구 다름 (acli/glab vs Confluence Python lib). 별 plugin 으로 두면 사용자가 필요한 것만 install.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">version 필드 제거 → commit SHA 기반 auto-update</div>
+        <div class="step-desc">활발한 개발 단계엔 매 push 마다 version bump 부담. plugin.json 에서 <code>version</code> 빼면 Claude Code 가 commit SHA 를 자동으로 version 으로 사용 → 사용자의 auto-update 가 변경 감지. stable 릴리스 시점에 다시 추가.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="slide-nav">
+  <div class="slide-nav-inner">
+    <div class="nav-left"><a href="07-sds-workflow-commands.html" onclick="event.preventDefault(); navigateTo(this.href)">&larr; 이전</a></div>
+    <div class="nav-center"><a href="index.html">08 / 10</a></div>
+    <div class="nav-right"><a href="09-team-deployment.html" onclick="event.preventDefault(); navigateTo(this.href)">다음 &rarr;</a></div>
+  </div>
+</nav>
+<script>
+function navigateTo(url) { document.body.classList.add('fade-out'); setTimeout(function() { window.location.href = url; }, 300); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') navigateTo('07-sds-workflow-commands.html');
+  if (e.key === 'ArrowRight') navigateTo('09-team-deployment.html');
+});
+</script>
+</body>
+</html>
