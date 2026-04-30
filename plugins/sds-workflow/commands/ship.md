@@ -175,8 +175,12 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/create-mr.sh \
 - **Jira 코멘트 본문 준비** — `${CLAUDE_PLUGIN_ROOT}/workflow/templates/jira-comment-ship.md` 로드 후 아래 플레이스홀더 치환 → `.work/{issue_key}-ship-comment.md` 로 저장.
   - `{ISSUE_KEY}`, `{MR_URL}`, `{BRANCH}`, `{TARGET_BRANCH}` — 확정값
   - `{SUBJECT}` — 커밋 메시지 요약 부분
+  - `{VERIFY_SUMMARY}` — `.work/{issue_key}.md` "## 검증 결과" 에서 한 줄 요약 합성. 형식: `lint:{OK|FAIL} / type:{OK|FAIL} / test:{N}p / UI:{GIF|SKIP|—}`. 각 토큰 출처:
+    - `lint`/`type`/`test` → "### 정적" 섹션 결과 (test 는 통과 케이스 수, 미실행 시 `—`)
+    - `UI` → "### 브라우저" 섹션의 GIF 경로 존재 시 `GIF`, `--skip-ui-check` 시 `SKIP`, UI 변경 없음이면 `—`
   - `{UI_NOTE}` — GIF 첨부 시 "• UI GIF: 첨부" / `--skip-ui-check` 시 "• UI 검증 스킵: {사유}" / UI 변경 없음이면 줄 제거
-  - **Authorship footer** — `{COMMAND}` = `ship`, `{AGENT}` = 세션 모델명, `{PLUGIN_VERSION}` = plugin.json version, `{USER}` = `git config user.name`
+  - `{ELAPSED_HUMAN}` — `.work/{issue_key}.md` "## 메트릭 > start_epoch" 라인을 읽어 `${CLAUDE_PLUGIN_ROOT}/scripts/session-metrics.sh ${start_epoch}` 호출 → `human=` 부분 추출. 메트릭 섹션이 비어있거나 (예: `/pick` 으로 진입했으나 `/autopilot` 을 거치지 않은 흐름) 스크립트 실패 시 `—` 로 폴백 후 본 흐름 계속.
+  - **Authorship footer** — `{COMMAND}` = `ship` (autopilot 호출 시 `autopilot`), `{AGENT}` = 세션 모델명, `{PLUGIN_VERSION}` = plugin.json version, `{USER}` = `git config user.name`
 - `${CLAUDE_PLUGIN_ROOT}/scripts/jira-comment.sh {issue_key} @.work/{issue_key}-ship-comment.md` (Bash) — `@파일` 경로 폼 사용.
   - exit 0 → 코멘트 post 성공.
   - exit 10 → acli 미가용. Handoff 에 "Jira 코멘트: 수동 필요 ({mr_url})" 표기 + 초안 파일 경로 안내.

@@ -13,6 +13,13 @@
 - 최근 업데이트: {YYYY-MM-DD HH:MM}
 - 다음 액션: /sds-workflow:pick | :ship | :land | :recap
 
+## 메트릭
+<!-- /pick · /autopilot Phase 0 가 자동 기록. /ship · /autopilot 페이즈 코멘트가 누적 시간 합성에 사용.
+     start_epoch 는 한 번만 기록되며 이슈 라이프사이클 내내 동일 (autopilot 다중 모드 subagent 도 자기 워크트리의 .work 에 자기 시작 시각을 기록). -->
+
+- start_epoch: {EPOCH_SECONDS}
+- start_iso: {YYYY-MM-DDTHH:MM:SS+TZ}
+
 ## Jira
 <!-- auto: /pick Phase 1 에서 acli jira workitem view {issue_key} --json 결과 -->
 

@@ -39,3 +39,7 @@
 - 제안 우선순위: {suggested_priority}
 - 제안 타입: {suggested_type}
 - 사유: {priority_reasoning}
+
+---
+
+🤖 작성: sds-workflow `/draft` (plugin v{PLUGIN_VERSION}) · 요청자: {USER} · 에이전트: {AGENT} · 작성 일시: {TIMESTAMP}

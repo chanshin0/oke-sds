@@ -79,7 +79,7 @@ ceph-web-ui/
 | `/recap` | 비행 **보고서** | Jira 결과 코멘트 + 선택적 Confluence 페이지 |
 | `/where` | 궤도상 **지금 어디?** | 상태 기반 라우터 (읽기 전용) |
 | `/draft` | 설계도 **초안** | 신규 Jira 이슈 초안 (선택 사용) |
-| `/autopilot` | **자동 순항** | 1~5단계 자율 실행. 사람 개입: 플랜 승인·커밋 승인·그레이존 답변. 다중 이슈 시 worktree 격리 + subagent 병렬 (--ralph 자동 강제) |
+| `/autopilot` | **자동 순항** | 1~5단계 끝까지 자율 실행 (승인 게이트 없음). 사람 개입은 안전장치 트리거(Deviation·UI 실패·Goal-backward·연속 실패)에 한정. 다중 이슈 시 worktree 격리 + subagent 병렬 |
 | `/tune` | 기체 **튜닝** | 피드백을 커맨드·템플릿·설정에 구조화 반영 |
 
 **네이밍 효과**:
@@ -321,57 +321,61 @@ Step 5: 제안 출력 + 실행 (읽기 전용)
 - 멀티 이슈 병행 시 컨텍스트 전환 쉬움
 - Dry-run 모드로 "지금 뭐가 다음이지?" 확인만 가능
 
-### `/autopilot CDS-XXXX [CDS-YYYY ...] [--stop-at <phase>] [--dry-run] [--ralph]` — 자율 순항
+### `/autopilot CDS-XXXX [CDS-YYYY ...] [--stop-at <phase>] [--dry-run]` — 자율 순항
 
-**목적**: 사용자 1~5단계(등록 → 계획 → 구현 → 검증 → MR)를 **한 호출로 자율 실행**. 머지 이후는 `/land` → `/recap` 별도. 이슈 키 N≥2 전달 시 다중 모드로 분기 (worktree 격리 + subagent 병렬).
+**목적**: 사용자 1~5단계(등록 → 계획 → 구현 → 검증 → MR)를 **한 호출로 끝까지 자율 실행**. 머지 이후는 `/land` → `/recap` 별도. 이슈 키 N≥2 전달 시 다중 모드로 분기 (worktree 격리 + subagent 병렬).
+
+승인 게이트는 폐기되었다 (2026-04-29). 검토를 원하는 흐름은 `/pick` → 수동 구현 → `/ship` 분리 사용을 권장.
 
 ```
 Phase 0: 인자 파싱 — 이슈 키 N개 카운트 → 단일/다중 모드 결정
 
 [단일 모드] N==1 또는 자유 프롬프트
-Phase A: 이륙 — /pick 실행 + 🚦 플랜 승인 게이트 (필수)
+Phase A: 이륙 — /pick 실행 (플랜 자동 초안만, EnterPlanMode 호출 없음)
   (인자가 자유 프롬프트면 /draft 선행해 이슈부터 생성)
+  → Phase A-3: pick 코멘트 1건 post
 
 Phase B: 구현 — 플랜의 "구현 접근" 단계별 자동 실행
-  - 편차/그레이존 감지 시 AskUserQuestion
-  - 한 단계 3회 연속 실패 시 중단
+  - 편차/그레이존: 보수적 자율 결정 + .work "## 결정 메모" 기록
+  - 한 단계 3회 연속 실패 시 failed 종료
+  → Phase B-2: implement 코멘트 1건 post
 
 Phase C: 검증 — /ship Phase 0~1.8 (정적·브라우저·Goal-backward)
   - 실패 시 자동 재시도 금지, 사용자 개입
+  - 검증 결과는 Phase D ship 코멘트에 한 줄로 흡수
 
 Phase D: 출하 — /ship Phase 2~3
-  - 🚦 커밋 메시지 승인 게이트 (필수)
-  - 커밋 · 푸시 · MR · Jira 코멘트
+  - 커밋 메시지 자동 확정
+  - 커밋 · 푸시 · MR · ship 코멘트 1건 post
 
 Phase E: Handoff — "머지 후 /land → /recap"
 
 [다중 모드] N>=2
 Phase M: 다중 이슈 병렬 실행
-  - --ralph 자동 강제 (게이트 N배 부담 회피)
   - working tree clean 강제, 워크트리 충돌 사전 검사
   - 각 이슈마다 Task agent (isolation: "worktree") spawn — 단일 메시지 병렬
-  - 각 subagent 가 자기 워크트리에서 단일 모드 Phase A-E 실행 (--ralph)
+  - 각 subagent 가 자기 워크트리에서 단일 모드 Phase A-E 실행
+  - 페이즈 코멘트 스킵 (ship 코멘트만 1건씩, Jira watcher 메일 폭증 방지)
   - 결과 aggregate → 다중 모드 전용 Handoff (성공/부분/실패 분리)
   - 워크트리는 자동 정리하지 않음 (사용자 머지 판단 후 git worktree remove)
 ```
 
-**사람 개입 게이트 (의도적, 단일 모드 기준 총 2-4회)**:
+**사람 개입 — 안전장치 트리거 시만**:
 
-| # | 게이트 | 시점 | 단일 모드 | 다중 모드 |
+| # | 트리거 | 시점 | 단일 모드 | 다중 모드 |
 |---|-------|------|---------|---------|
-| 1 | 플랜 승인 | Phase A 말미 | 필수 (`--ralph` 시 스킵) | 자동 스킵 |
-| 2 | 그레이존 답변 | Phase B / C | 발생 시만 | subagent 내부에서 발생 시 해당 subagent 만 일시 정지 |
-| 3 | 커밋 메시지 승인 | Phase D | 필수 (`--ralph` 시 스킵) | 자동 스킵 |
-| 4 | UI/Goal-backward 실패 시 중단 | Phase C | 발생 시만 | 발생 subagent 만 실패 처리 |
+| 1 | Deviation (플랜 밖 변경) | Phase C `/ship` Phase 0 | 자동 중단 → 사용자 결정 | 발생 subagent 만 `failed` 종료 |
+| 2 | UI 검증 실패 | Phase C `/ship` Phase 1.5 | 자동 중단 → 사용자 결정 | 발생 subagent 만 `failed` 종료 |
+| 3 | Goal-backward 의문 | Phase C `/ship` Phase 1.8 | 자동 중단 → 사용자 결정 | 발생 subagent 만 `failed` 종료 |
+| 4 | 연속 실패 3회 | Phase B 어느 단계든 | 결정 메모 기록 후 `failed` | 동일 |
 
 **안전 장치**:
-- `EnterPlanMode` 구조적 차단 유지 (플랜 미승인 상태 구현 진입 불가)
 - `/ship` Phase 0 Deviation 체크 유지
-- `--stop-at <phase>` — pick / plan-approved / implement / ship-preflight / mr
+- `--stop-at <phase>` — pick / implement / ship-preflight / mr
 - `--dry-run` — 경로만 출력
-- `--ralph` — 승인 게이트만 스킵, 안전장치 유지. 다중 모드는 자동 강제.
 - `--skip-ui-check` 는 autopilot 에서 비활성 (UI 검증 생략은 사람의 명시적 선택이어야 함)
 - 다중 모드 working tree clean 강제 + 워크트리 격리 (`isolation: "worktree"`)
+- 다중 모드 페이즈 코멘트 스킵 (ship 만 post)
 
 **적용 권장**: Trivial ~ Medium 복잡도. 여러 도메인 교차·외부 API 계약 변경 이슈는 `/pick` 개별 호출 권장. 다중 모드는 비슷한 패턴의 trivial batch 작업에 한정 — 도메인 교차·상호 의존 이슈는 단일 모드 순차 처리.
 
